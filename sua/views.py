@@ -11,13 +11,12 @@ def check(request):
         Correct_PassWord=StudentInfo.objects.get(NetID=User_NetID).PassWord
     except StudentInfo.DoesNotExist:
         return HttpResponse("用户不存在")
-    if (Correct_PassWord==User_PassWord):    
-        request.session['Is_Login']=True
-        
+    if (Correct_PassWord==User_PassWord):         
         return redirect(index,User_NetID)         
     else:
         return HttpResponse("登录失败!")
 
+    
 
 
     
