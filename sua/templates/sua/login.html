@@ -1,0 +1,15 @@
+<html>
+<body>
+<p>Welcome to SYSU_MATH_ZH</p>
+<form action="{% url 'check' %}" method="post">
+{% csrf_token %}
+ NetID:<br>
+<input type="text" name="NetID">
+<br>
+ PassWord:<br>
+<input type="text" name="PassWord">
+<br><br>
+<input type="submit" value="提交">
+</form> 
+</body>
+</html>
