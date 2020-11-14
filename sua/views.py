@@ -9,8 +9,8 @@ def Login(request):
 def check(request):
     req=request.POST  #req is a dict    
     User_NetID=request.POST['NetID']
-    User_PassWord=request.POST['PassWord']
-    user = authenticate(username=User_NetID, password=User_PassWord)
+    User_Password=request.POST['Password']
+    user = authenticate(username=User_NetID, password=User_Password)
     if (user is not None):   
         login(request,user)
         return redirect(index)         
