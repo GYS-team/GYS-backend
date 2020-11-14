@@ -2,8 +2,11 @@
 
 <body>
 <p>Here is the index page of {{ User_NetID }}</p>
-<p>Activity: {{ Activity }} </p>
-<p></p>
+<p>Total Hours:{{ suahours }} </p>
+{% for activity in  Activity  %}
+<p>Activity: {{ activity.activity.title }} </p>
+{% endfor %}
+
 <form action="{% url 'logout' %}" method="post">
 {% csrf_token %}
 <input type="submit" value="退出登录">

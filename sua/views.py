@@ -19,10 +19,10 @@ def check(request):
 @login_required
 def index(request):
     NetID=request.user.username
-    try:
-        context={'User_NetID':NetID,'Activity':StudentInfo.objects.get(user=request.user).Activity.Time}
-    except AttributeError:
-        context={'User_NetID':NetID,'Activity':'NULL'}
+    context={}
+    context['suahours']=request.user.studentinfo.get_suahours()
+    context['User_NetID']=NetID
+    context['Activity']=request.user.studentinfo.suas.all()
     return render(request,"sua\\index.html",context)
 @login_required
 def Logout(request):
@@ -41,7 +41,7 @@ def changepassword(request):
             return HttpResponse("修改密码成功！")
         else:
             return HttpResponse("原密码错误！")
-        
+
     
 
 
