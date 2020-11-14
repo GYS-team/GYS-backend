@@ -1,8 +1,9 @@
 <html>
 
 <body>
-<p>Here is the index page of {{ User_Name }}</p>
-<p>He join the activity of {{ Activity }} </p>
+<p>Here is the index page of {{ User_NetID }}</p>
+<p>Activity: {{ Activity }} </p>
+<p></p>
 <form action="{% url 'logout' %}" method="post">
 {% csrf_token %}
 <input type="submit" value="退出登录">

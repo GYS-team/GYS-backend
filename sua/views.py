@@ -11,11 +11,27 @@ def check(request):
         Correct_PassWord=StudentInfo.objects.get(NetID=User_NetID).PassWord
     except StudentInfo.DoesNotExist:
         return HttpResponse("用户不存在")
-    if (Correct_PassWord==User_PassWord):         
-        return redirect(index,User_NetID)         
+    if (Correct_PassWord==User_PassWord):   
+        request.session['Is_Login']=True
+        request.session['User_NetID']=User_NetID
+        return redirect(index)         
     else:
         return HttpResponse("登录失败!")
-
+def index(request):
+    if (request.session['Is_Login']):
+        NetID=request.session['User_NetID']
+        try:
+            context={'User_NetID':NetID,'Activity':StudentInfo.objects.get(NetID=NetID).Activity.Time}
+        except AttributeError:
+            context={'User_NetID':NetID,'Activity':'NULL'}
+            
+        return render(request,"sua\\index.html",context)
+    else:
+        return HttpResponse("No Permission")
+def logout(request):
+    request.session['Is_Login']=False
+    return HttpResponse("退出登录成功!")
+   
     
 
 
