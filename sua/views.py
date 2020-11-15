@@ -41,6 +41,13 @@ def changepassword(request):
             return HttpResponse("修改密码成功！")
         else:
             return HttpResponse("原密码错误！")
+@login_required
+def applications(request):
+    if request.method=='GET':
+        return render(request,"sua\\applications.html")
+    else:
+        return HttpResponse("TODO")
+
 
     
 
