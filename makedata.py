@@ -21,7 +21,8 @@ for i in range(len(UserName)):
     stu=StudentInfo(user=User.objects.get(id=i+1),name=User.objects.get(id=i+1).username)
     stu.save()
 for i in StudentInfo.objects.all():
-    sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))))
-    sua.save()
+    for j in range(50):
+        sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))))
+        sua.save()
     
     

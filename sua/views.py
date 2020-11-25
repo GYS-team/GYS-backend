@@ -1,7 +1,7 @@
 from django.shortcuts import render,HttpResponse,redirect
 from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
-
+from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage,InvalidPage
 from .models import StudentInfo
 # Create your views here.
 def Login(request):
@@ -10,6 +10,8 @@ def check(request):
     req=request.POST  #req is a dict    
     User_NetID=request.POST['NetID']
     User_Password=request.POST['Password']
+    if (req["Remember_me"]):
+        print("Yes")#TODO
     user = authenticate(username=User_NetID, password=User_Password)
     if (user is not None):   
         login(request,user)
@@ -22,7 +24,18 @@ def index(request):
     context={}
     context['suahours']=request.user.studentinfo.get_suahours()
     context['User_NetID']=NetID
-    context['Activity']=request.user.studentinfo.suas.all()
+    sua_all=request.user.studentinfo.suas.all()
+    paginator=Paginator(sua_all,10)
+    page=request.GET.get('page')#获取请求参数
+    try:
+        activity=paginator.page(page)
+    except PageNotAnInteger:
+        activity=paginator.page(1)
+    except InvalidPage:
+        return HttpResponse("Bad Request")
+    except EmptyPage:
+        activity=paginator.page(paginator.num_pages)
+    context['Activity']=activity#TODO：activity初值
     return render(request,"sua\\index.html",context)
 @login_required
 def Logout(request):

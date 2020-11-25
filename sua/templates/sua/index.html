@@ -3,14 +3,21 @@
 <body>
 <p>Here is the index page of {{ User_NetID }}</p>
 <p>Total Hours:{{ suahours }} </p>
-{% for activity in  Activity  %}
-<p>Activity: {{ activity.activity.title }} </p>
+{% for ac in  Activity  %}
+<p>Activity: {{ ac.activity.title }} </p>
 {% endfor %}
 
 <form action="{% url 'logout' %}" method="post">
 {% csrf_token %}
 <input type="submit" value="退出登录">
 <a href="{% url 'changepassword' %}">更改密码</a>
+{% if Activity.has_previous %}
+	<a href="?page={{ Activity.previous_page_number }}">上一页</a>
+{% endif %}
+Page {{ Activity.number }} of {{Activity.paginator.num_pages }}
+{% if Activity.has_next %}
+	<a href="?page={{ Activity.next_page_number }}">下一页</a>
+{% endif %}
 </form>
 </form>
 </body>
