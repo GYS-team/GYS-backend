@@ -3,6 +3,7 @@ from django.contrib.auth import authenticate,login,logout
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage,InvalidPage
 from .models import StudentInfo
+from .serializers import *
 # Create your views here.
 def Login(request):
     return render(request,"sua\\login.html")
@@ -61,6 +62,16 @@ def applications(request):
     else:
         return HttpResponse("TODO")
 
+def student(request):
+    Id=request.GET.get('id')
+    if (Id is not None):
+        stu=StudentInfo.objects.get(id=Id)
+        se=StudentInfoSerializers(instance=stu)
+        return HttpResponse(se.data)
+    else:
+        stu=StudentInfo.objects.all()
+        se=StudentInfoSerializers(instance=stu,many=True)
+        return HttpResponse(se.data)
 
     
 
