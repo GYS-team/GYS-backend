@@ -1,21 +1,27 @@
-from .models import Activity,StudentInfo,Sua
 from rest_framework import serializers
-from django.contrib.auth.models import User
-class ActivitySerializers(serializers.ModelSerializer):
-    class Meta:
-        model=Activity
-        fields=('created','title','detail','is_valid')
-class StudentInfoSerializers(serializers.ModelSerializer):    
+from .models import *
+class UserSerializer(serializers.Serializer):
+    username=serializers.CharField(max_length=10)
+    #password=serializers.CharField(max_length=100)
+class StudentInfo_Full_Serializer(serializers.Serializer):
+    number=serializers.CharField(max_length=10)
+    suahours = serializers.FloatField(default=0)
+    name = serializers.CharField(max_length=100)
+    user=UserSerializer()
+class Activity_Full_Serializer(serializers.Serializer):
+    created=serializers.DateTimeField(read_only=True)
+    title = serializers.CharField(max_length=100)
+    detail = serializers.CharField(max_length=400)
+    is_valid = serializers.BooleanField(default=False)
+    def create(self,validated_data):
+        ac=Activity.objects.create(**validated_data)
+        return ac
+class StudentInfoSerializer(serializers.ModelSerializer):
+    #mobile=serializers.CharField(max_length=400)
     class Meta:
         model=StudentInfo
-        fields=('user','number','name','suahours','suas')    
-class SuaSerializers(serializers.ModelSerializer):
-    activity=ActivitySerializers()
-    student=StudentInfoSerializers()
-    stuhours=serializers.FloatField(default=0.0)
-class UserSerializers(serializers.ModelSerializer):
-    class Meta:
-        model=User
-        fields=('username','password')
-
+        fields="__all__"
         
+        
+    
+    

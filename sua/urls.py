@@ -17,11 +17,17 @@ from django.contrib import admin
 from django.urls import path,include
 from . import views
 urlpatterns = [
-    path('',views.Login),
-    path('check/',views.check,name='check'),
+    #path('',views.Login,name='check'),
+    #path('index/',views.index),
+    #path('logout/',views.Logout,name='logout'),
+    #path('changepassword/',views.changepassword,name='changepassword'),
+    #path('applications/',views.applications,name='applications'),
+    #以上是Django路由配置
+    #以下是DRF路由配置
+    path('login/',views.Login),
     path('index/',views.index),
-    path('logout/',views.Logout,name='logout'),
-    path('changepassword/',views.changepassword,name='changepassword'),
-    path('applications/',views.applications,name='applications'),
-    path('student/',views.student)
+    path('student/',views.student.as_view()),#param:username || id
+    path('sua/',views.sua.as_view()),#param:id
+    path('activity/',views.activity.as_view()),#param:id
+    
 ]

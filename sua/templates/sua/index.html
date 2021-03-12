@@ -7,10 +7,9 @@
 <p>Activity: {{ ac.activity.title }} </p>
 {% endfor %}
 
-<form action="{% url 'logout' %}" method="post">
-{% csrf_token %}
+
 <input type="submit" value="退出登录">
-<a href="{% url 'changepassword' %}">更改密码</a>
+
 {% if Activity.has_previous %}
 	<a href="?page={{ Activity.previous_page_number }}">上一页</a>
 {% endif %}
