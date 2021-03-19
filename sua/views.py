@@ -6,6 +6,9 @@ from django.core.paginator import Paginator,PageNotAnInteger,EmptyPage,InvalidPa
 from .models import *
 from .serializers import *
 from django.views import View
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 # Create your views here.
 '''
 class Login(View):
@@ -100,24 +103,39 @@ def index(request):
         activity=paginator.page(paginator.num_pages)
     context['Activity']=activity#TODO：activity初值
     return render(request,"sua\\index.html",context)
-class student(View):
+class student(APIView):
     def get(self,request):
-        Id=request.GET.get('id')
-        username=request.GET.get('username')
+        Id=request.query_params.get('id')
+        number=request.query_params.get('number')
         if (Id is not None):
             stu=StudentInfo.objects.get(id=int(Id))
             se=StudentInfo_Full_Serializer(instance=stu)
-            return JsonResponse(se.data)
-        elif (username is not None):
-            stu=StudentInfo.objects.get(name=username)
+            return Response(se.data)
+        elif (number is not None):
+            stu=StudentInfo.objects.get(number=number)
             se=StudentInfo_Full_Serializer(instance=stu)
-            return JsonResponse(se.data)
+            return Response(se.data)
         else:
             stu=StudentInfo.objects.all()
             se=StudentInfo_Full_Serializer(instance=stu,many=True)
-            return JsonResponse(se.data,safe=False)
+            return Response(se.data)
     def post(self,request):
-        pass     
+        data=request.data
+        se=StudentInfo_Full_Serializer(data=data)
+        if (se.is_valid(raise_exception=True)):
+            se.save()
+            return Response({'code':100,'msg':'Successfully created.'})
+    def delete(self,request):
+        Id=request.query_params.get('id')
+        number=request.query_params.get('number')
+        if (Id is not None):
+            stu=StudentInfo.objects.get(id=int(Id))
+            stu.delete()
+            return Response({'code':100,'msg':'Successfully Deleted.'})
+        elif (number is not None):
+            stu=StudentInfo.objects.get(number=username)
+            stu.delete()
+            return Response({'code':100,'msg':'Successfully Deleted.'})
 class sua(View):
     def get(self,request):
         Id=request.GET.get('id')
@@ -131,25 +149,31 @@ class sua(View):
             return JsonResponse(se.data,safe=False)
     def post(self,request):
         pass
-class activity(View):
+class activity(APIView):
     def get(self,request):
-        Id=request.GET.get('id')
+        Id=request.query_params.get('id')
         if (Id is not None):
             ac=Activity.objects.get(id=int(Id))
             se=Activity_Full_Serializer(instance=ac)
-            return JsonResponse(se.data)
+            return Response(se.data)
         else:
             ac=Activity.objects.all()
-            se=Activity_Title_Serializer(instance=suas,many=True)
-            return JsonResponse(se.data,safe=False)
+            se=Activity_Full_Serializer(instance=ac,many=True)
+            return Response(se.data)
     def post(self,request):
-        data=request.POST
-        se=Activity_Full_Serializer(data=data)
-        if (se.is_valid()):
-            se.save()
-            return HttpResponse("Good!")
-        else:
-            return JsonResponse(request.POST)
+        data=request.data
+        if (data.get('Id')==None):
+            se=Activity_Full_Serializer(data=data)
+            if (se.is_valid(raise_exception=True)):
+                se.save()
+                return Response({'code':100,'msg':'Successfully created.'})
+        elif (data.get('Id')!=None):
+            instance=Activity.objects.get(id=data.pop('Id'))
+            se=Activity_Full_Serializer(instance=instance,data=data,partial=True)
+            if (se.is_valid(raise_exception=True)):
+                se.save()
+                return Response({'code':100,'msg':'Activity has been valid.'})
+        
 
 
 

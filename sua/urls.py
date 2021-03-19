@@ -25,7 +25,7 @@ urlpatterns = [
     #以上是Django路由配置
     #以下是DRF路由配置
     path('login/',views.Login),
-    path('index/',views.index),
+    path('index/',views.index),    
     path('student/',views.student.as_view()),#param:username || id
     path('sua/',views.sua.as_view()),#param:id
     path('activity/',views.activity.as_view()),#param:id

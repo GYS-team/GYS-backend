@@ -4,19 +4,9 @@ from django.utils import timezone
 
 
 # Create your models here.
-class Activity(models.Model):
-    created = models.DateTimeField('创建日期', auto_now_add=True)
-    title = models.CharField(max_length=100)
-    detail = models.CharField(max_length=400)
-    is_valid = models.BooleanField(default=False)
-
-    def __str__(self):
-        return self.title
-
-
 class StudentInfo(models.Model):
     user = models.OneToOneField(
-        User,  # username:NetID
+        User,  
         on_delete=models.CASCADE,
     )
     number = models.CharField(max_length=10)  # 学号
@@ -34,6 +24,22 @@ class StudentInfo(models.Model):
 
     def __str__(self):
         return self.name
+class Activity(models.Model):
+    owner=models.ForeignKey(
+        StudentInfo,
+        related_name="activity",
+        on_delete=models.CASCADE,
+    )
+    created = models.DateTimeField('创建日期', auto_now=True)
+    title = models.CharField(max_length=100)
+    detail = models.CharField(max_length=400)
+    is_valid = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.title
+
+
+
 
 
 class Sua(models.Model):
@@ -52,7 +58,7 @@ class Sua(models.Model):
 
 class Proof(models.Model):
     owner = models.ForeignKey(
-        User,
+        StudentInfo,
         related_name='proofs',
         on_delete=models.CASCADE,
     )
@@ -71,7 +77,7 @@ class Application(models.Model):
         on_delete=models.CASCADE,
     )
     owner = models.ForeignKey(
-        User,
+        StudentInfo,
         related_name='applications',
         on_delete=models.CASCADE,
     )
