@@ -1,8 +1,10 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
-
-
+import datetime
+YEAR_CHOICES = []
+for r in range(2016, datetime.datetime.now().year):
+    YEAR_CHOICES.append((r, r))
 # Create your models here.
 class StudentInfo(models.Model):
     user = models.OneToOneField(
@@ -11,7 +13,14 @@ class StudentInfo(models.Model):
     )
     number = models.CharField(max_length=10)  # 学号
     suahours = models.FloatField(default=0)
-
+    classtype = models.CharField(max_length=100,default='一班')
+    grade = models.IntegerField(
+        choices=YEAR_CHOICES,
+        default=datetime.datetime.now().year
+    )
+    phone = models.CharField(max_length=100,default='000')
+    power = models.IntegerField(default=0)  
+    name = models.CharField(max_length=100)# 0:普通学生  1:活动级管理员
     def get_suahours(self):
         total = 0
         for sua in self.suas.all():
@@ -20,7 +29,7 @@ class StudentInfo(models.Model):
         self.save()
         return total
 
-    name = models.CharField(max_length=100)
+    
 
     def __str__(self):
         return self.name
@@ -58,16 +67,21 @@ class Sua(models.Model):
 
 class Proof(models.Model):
     owner = models.ForeignKey(
-        StudentInfo,
+        User,
         related_name='proofs',
         on_delete=models.CASCADE,
     )
     created = models.DateTimeField(auto_now_add=True)
     is_offline = models.BooleanField(default=False)
-    proof_file = models.FileField(
-        upload_to='proofs',
-        blank=True,
-    )
+    
+
+    def __str__(self):
+        if self.is_offline:
+            return '线下证明'
+        else:
+            return self.owner.username +\
+                '_' +\
+                self.created.strftime("%Y%m%d%H%M%S")
 
 
 class Application(models.Model):
@@ -77,18 +91,21 @@ class Application(models.Model):
         on_delete=models.CASCADE,
     )
     owner = models.ForeignKey(
-        StudentInfo,
+        User,
         related_name='applications',
         on_delete=models.CASCADE,
     )
     created = models.DateTimeField('创建日期', default=timezone.now)
+    contact = models.CharField(max_length=100, blank=True) # 不明字段
     proof = models.ForeignKey(
         Proof,
         related_name='applications',
         on_delete=models.CASCADE,
     )
+    is_checked = models.BooleanField(default=False) # 不明字段
     status = models.IntegerField(default=0)  # 0: 通过; 1: 未通过; 2: 需要线下证明
     feedback = models.CharField(max_length=400, blank=True)
+   
 
     def __str__(self):
         return self.sua.student.name + '的 ' + self.sua.activity.title + '的 ' + '申请'

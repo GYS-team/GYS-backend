@@ -9,6 +9,7 @@ from django.views import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
+from rest_framework.generics import GenericAPIView
 # Create your views here.
 '''
 class Login(View):
@@ -71,18 +72,25 @@ def applications(request):
 '''
 #以上是Django的视图函数
 #以下是DRF的视图函数 
-def Login(request):
-    req=request.POST  #req is a dict    
-    User_NetID=request.POST['NetID']
-    User_Password=request.POST['Password']
-    if (req["Remember_me"]):
-        print("Yes")#TODO
-    user = authenticate(username=User_NetID, password=User_Password)
-    if (user is not None):   
-        login(request,user)
-        return HttpResponse("Yes")       
-    else:
-        return HttpResponse("No")
+class Auth(APIView):
+    def post(self,request):
+        data=request.data 
+        del data['Remember_me']#TODO
+        if (data.pop('status')==0):
+            se=UserSerializer(data=data)
+            if (se.is_valid(raise_exception=True)):
+                user = authenticate(**se.data)
+                print(user)
+                if (user is not None):   
+                    login(request,user)
+                    user.studentinfo.suahours=user.studentinfo.get_suahours()
+                    return Response("Yes")       
+                else:
+                    return Response("No")
+        else:
+            logout(request)
+            return Response("Yes")
+
 @login_required
 def index(request):
     NetID=request.user.username
@@ -103,25 +111,27 @@ def index(request):
         activity=paginator.page(paginator.num_pages)
     context['Activity']=activity#TODO：activity初值
     return render(request,"sua\\index.html",context)
-class student(APIView):
+class studentGenericAPIView(GenericAPIView):
+    queryset=StudentInfo.objects.all()
+    serializer_class=StudentInfo_Full_Serializer
     def get(self,request):
         Id=request.query_params.get('id')
         number=request.query_params.get('number')
         if (Id is not None):
-            stu=StudentInfo.objects.get(id=int(Id))
-            se=StudentInfo_Full_Serializer(instance=stu)
+            stu=StudentInfo.objects.get(id=Id)
+            se= self.get_serializer(instance=stu)
             return Response(se.data)
         elif (number is not None):
             stu=StudentInfo.objects.get(number=number)
-            se=StudentInfo_Full_Serializer(instance=stu)
+            se=self.get_serializer(instance=stu)
             return Response(se.data)
         else:
-            stu=StudentInfo.objects.all()
-            se=StudentInfo_Full_Serializer(instance=stu,many=True)
+            stu=self.get_queryset()
+            se=self.get_serializer(instance=stu,many=True)
             return Response(se.data)
     def post(self,request):
         data=request.data
-        se=StudentInfo_Full_Serializer(data=data)
+        se=self.get_serializer(data=data)
         if (se.is_valid(raise_exception=True)):
             se.save()
             return Response({'code':100,'msg':'Successfully created.'})
@@ -136,17 +146,17 @@ class student(APIView):
             stu=StudentInfo.objects.get(number=username)
             stu.delete()
             return Response({'code':100,'msg':'Successfully Deleted.'})
-class sua(View):
+class sua(APIView):
     def get(self,request):
-        Id=request.GET.get('id')
+        Id=request.query_params.get('id')
         if (Id is not None):
             suas=Sua.objects.get(id=int(Id))
             se=Sua_Title_Serializer(instance=suas)
-            return JsonResponse(se.data)
+            return Response(se.data)
         else:
             suas=Sua.objects.all()
             se=Sua_Title_Serializer(instance=suas,many=True)
-            return JsonResponse(se.data,safe=False)
+            return Response(se.data)
     def post(self,request):
         pass
 class activity(APIView):
@@ -163,7 +173,7 @@ class activity(APIView):
     def post(self,request):
         data=request.data
         if (data.get('Id')==None):
-            se=Activity_Full_Serializer(data=data)
+            se=Activity_Full_Serializer(data=data,partial=True)
             if (se.is_valid(raise_exception=True)):
                 se.save()
                 return Response({'code':100,'msg':'Successfully created.'})

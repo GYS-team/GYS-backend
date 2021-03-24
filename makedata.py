@@ -11,11 +11,11 @@ import random
 #每次开始时重置数据库
 os.system("python manage.py makemigrations sua")
 os.system("python manage.py migrate")
-for us in UserName:
-    user= User.objects.create_user(username=us,password='123')
+for i in range(len(UserName)):
+    user= User.objects.create_user(username=str(19337001+i),password='123')
     user.save()
 for i in range(len(UserName)):
-    stu=StudentInfo(user=User.objects.get(id=i+1),name=User.objects.get(id=i+1).username,number=19337000+i)
+    stu=StudentInfo(user=User.objects.get(id=i+1),name=UserName[i],number=User.objects.get(id=i+1).username)
     stu.save()
 for ac in ActivityTitle:
     activity=Activity(title=ac,owner=StudentInfo.objects.get(id=random.randint(1,len(UserName))))
