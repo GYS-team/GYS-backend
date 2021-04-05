@@ -24,10 +24,17 @@ urlpatterns = [
     #path('applications/',views.applications,name='applications'),
     #以上是Django路由配置
     #以下是DRF路由配置
-    #path('api-auth/', include('rest_framework.urls')),
-    path('index/',views.index),    
-    path('student/',views.studentGenericAPIView.as_view()),
-    path('sua/',views.sua.as_view()),
-    path('activity/',views.activity.as_view()),
-    path('login/',views.Auth.as_view()),
+    #path('api-auth/', include('rest_framework.urls')),    
+    path('student/<int:id>',views.StudentView.as_view()),
+    path('student/admin/',views.AdminStudentView.as_view()),
+    path('sua/<int:id>',views.SuaView.as_view()),
+    path('sua/admin/',views.AdminSuaView.as_view()),
+    path('activity/<int:id>',views.ActivityView.as_view()),
+    path('activity/admin/',views.AdminActivityView.as_view()),
+    path('auth/',views.Auth.as_view()),
+    #path('admin/proof/',views.AdminProofView.as_view()),
+    path('proof/<int:id>',views.ProofView.as_view()),
+    #path('admin/application/',views.AdminApplicationView.as_view()),
+    path('application/<int:id>',views.ApplicationView.as_view()),
+   
 ]

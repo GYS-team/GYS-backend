@@ -24,5 +24,9 @@ for i in StudentInfo.objects.all():
     for j in range(50):
         sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))),suahours=random.randint(1,10))
         sua.save()
-    
+for i in StudentInfo.objects.all():
+   proof=Proof.objects.create(owner=i)
+   proof.save()
+   application=Application.objects.create(proof=proof,owner=i,sua=Sua.objects.get(id=random.randint(1,Sua.objects.count())))
+   application.save()
     

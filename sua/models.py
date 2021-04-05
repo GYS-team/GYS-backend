@@ -3,7 +3,7 @@ from django.contrib.auth.models import User, Group
 from django.utils import timezone
 import datetime
 YEAR_CHOICES = []
-for r in range(2016, datetime.datetime.now().year):
+for r in range(2016, datetime.datetime.now().year+1):
     YEAR_CHOICES.append((r, r))
 # Create your models here.
 class StudentInfo(models.Model):
@@ -20,11 +20,12 @@ class StudentInfo(models.Model):
     )
     phone = models.CharField(max_length=100,default='000')
     power = models.IntegerField(default=0)  
-    name = models.CharField(max_length=100)# 0:普通学生  1:活动级管理员
+    name = models.CharField(max_length=100)
     def get_suahours(self):
         total = 0
         for sua in self.suas.all():
-            total += sua.suahours
+            if (sua.is_valid is True):
+                total += sua.suahours
         self.suahours = total
         self.save()
         return total
@@ -63,11 +64,12 @@ class Sua(models.Model):
         on_delete=models.CASCADE,
     )
     suahours = models.FloatField(default=0.0)
+    is_valid=models.BooleanField(default=False)
 
 
 class Proof(models.Model):
     owner = models.ForeignKey(
-        User,
+        StudentInfo,
         related_name='proofs',
         on_delete=models.CASCADE,
     )
@@ -91,18 +93,18 @@ class Application(models.Model):
         on_delete=models.CASCADE,
     )
     owner = models.ForeignKey(
-        User,
+        StudentInfo,
         related_name='applications',
         on_delete=models.CASCADE,
     )
     created = models.DateTimeField('创建日期', default=timezone.now)
     contact = models.CharField(max_length=100, blank=True) # 不明字段
-    proof = models.ForeignKey(
+    proof = models.OneToOneField(
         Proof,
         related_name='applications',
         on_delete=models.CASCADE,
     )
-    is_checked = models.BooleanField(default=False) # 不明字段
+    is_checked = models.BooleanField(default=False) 
     status = models.IntegerField(default=0)  # 0: 通过; 1: 未通过; 2: 需要线下证明
     feedback = models.CharField(max_length=400, blank=True)
    

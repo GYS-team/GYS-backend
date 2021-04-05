@@ -75,21 +75,23 @@ def applications(request):
 class Auth(APIView):
     def post(self,request):
         data=request.data 
+        print(data)
         del data['Remember_me']#TODO
-        if (data.pop('status')==0):
+        if (int(data.pop('status'))==0):
             se=UserSerializer(data=data)
             if (se.is_valid(raise_exception=True)):
-                user = authenticate(**se.data)
-                print(user)
+                print(se.data)
+                user = authenticate(**se. validated_data)
                 if (user is not None):   
+                    print("Yes")
                     login(request,user)
                     user.studentinfo.suahours=user.studentinfo.get_suahours()
-                    return Response("Yes")       
+                    return Response({'result':1,'id':user.id})       
                 else:
-                    return Response("No")
+                    return Response({'result':0})
         else:
             logout(request)
-            return Response("Yes")
+            return Response({'result':1})
 
 @login_required
 def index(request):
@@ -111,24 +113,20 @@ def index(request):
         activity=paginator.page(paginator.num_pages)
     context['Activity']=activity#TODO：activity初值
     return render(request,"sua\\index.html",context)
-class studentGenericAPIView(GenericAPIView):
+class StudentView(GenericAPIView):
     queryset=StudentInfo.objects.all()
-    serializer_class=StudentInfo_Full_Serializer
+    serializer_class=StudentInfoSerializer
+    lookup_field='id'
+    def get(self,request,id):
+        stu=self.get_object()
+        se= self.get_serializer(instance=stu)
+        return Response(se.data)    
+class AdminStudentView(GenericAPIView):
+    queryset=StudentInfo.objects.all()
+    serializer_class=StudentInfoSerializer
     def get(self,request):
-        Id=request.query_params.get('id')
-        number=request.query_params.get('number')
-        if (Id is not None):
-            stu=StudentInfo.objects.get(id=Id)
-            se= self.get_serializer(instance=stu)
-            return Response(se.data)
-        elif (number is not None):
-            stu=StudentInfo.objects.get(number=number)
-            se=self.get_serializer(instance=stu)
-            return Response(se.data)
-        else:
-            stu=self.get_queryset()
-            se=self.get_serializer(instance=stu,many=True)
-            return Response(se.data)
+        se=self.get_serializer(instance=self.get_queryset(),many=True)
+        return Response(se.data)
     def post(self,request):
         data=request.data
         se=self.get_serializer(data=data)
@@ -136,63 +134,111 @@ class studentGenericAPIView(GenericAPIView):
             se.save()
             return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
-        Id=request.query_params.get('id')
-        number=request.query_params.get('number')
-        if (Id is not None):
-            stu=StudentInfo.objects.get(id=int(Id))
-            stu.delete()
-            return Response({'code':100,'msg':'Successfully Deleted.'})
-        elif (number is not None):
-            stu=StudentInfo.objects.get(number=username)
-            stu.delete()
-            return Response({'code':100,'msg':'Successfully Deleted.'})
-class sua(APIView):
+        stu=self.get_object()
+        stu.delete()
+        return Response({'code':100,'msg':'Successfully deleted.'})
+
+class SuaView(GenericAPIView):
+    queryset=Sua.objects.all()
+    serializer_class=SuaSerializer
+    lookup_field='id'
+    def get(self,request,id):
+        sua=self.get_object()
+        se= self.get_serializer(instance=sua)
+        return Response(se.data) 
+class AdminSuaView(GenericAPIView):
+    queryset=Sua.objects.all()
+    serializer_class=SuaSerializer
     def get(self,request):
-        Id=request.query_params.get('id')
-        if (Id is not None):
-            suas=Sua.objects.get(id=int(Id))
-            se=Sua_Title_Serializer(instance=suas)
-            return Response(se.data)
-        else:
-            suas=Sua.objects.all()
-            se=Sua_Title_Serializer(instance=suas,many=True)
-            return Response(se.data)
-    def post(self,request):
-        pass
-class activity(APIView):
-    def get(self,request):
-        Id=request.query_params.get('id')
-        if (Id is not None):
-            ac=Activity.objects.get(id=int(Id))
-            se=Activity_Full_Serializer(instance=ac)
-            return Response(se.data)
-        else:
-            ac=Activity.objects.all()
-            se=Activity_Full_Serializer(instance=ac,many=True)
-            return Response(se.data)
+        se=self.get_serializer(instance=self.get_queryset(),many=True)
+        return Response(se.data)
     def post(self,request):
         data=request.data
-        if (data.get('Id')==None):
-            se=Activity_Full_Serializer(data=data,partial=True)
-            if (se.is_valid(raise_exception=True)):
-                se.save()
-                return Response({'code':100,'msg':'Successfully created.'})
-        elif (data.get('Id')!=None):
-            instance=Activity.objects.get(id=data.pop('Id'))
-            se=Activity_Full_Serializer(instance=instance,data=data,partial=True)
-            if (se.is_valid(raise_exception=True)):
-                se.save()
-                return Response({'code':100,'msg':'Activity has been valid.'})
-        
-
-
-
-        
-
-
+        se=self.get_serializer(data=data)
+        if (se.is_valid(raise_exception=True)):
+            se.save()
+            return Response({'code':100,'msg':'Successfully created.'})
+    def delete(self,request):
+        stu=self.get_object()
+        stu.delete()
+        return Response({'code':100,'msg':'Successfully deleted.'})  
+class ActivityView(GenericAPIView):
+    queryset=Activity.objects.all()
+    serializer_class=ActivitySerializer
+    lookup_field='id'
+    def get(self,request,id):
+        ac=self.get_object()
+        se= self.get_serializer(instance=ac)
+        return Response(se.data) 
     
+class AdminActivityView(GenericAPIView):
+    queryset=Activity.objects.all()
+    serializer_class=ActivitySerializer
+    def get(self,request):
+        se=self.get_serializer(instance=self.get_queryset(),many=True)
+        return Response(se.data)
+    def post(self,request):
+        data=request.data
+        se=self.get_serializer(data=data)
+        if (se.is_valid(raise_exception=True)):
+            se.save()
+            return Response({'code':100,'msg':'Successfully created.'})
+    def delete(self,request):
+        stu=self.get_object()
+        stu.delete()
+        return Response({'code':100,'msg':'Successfully deleted.'})  
+
+class AdminProofView(GenericAPIView):
+    queryset=Proof.objects.all()
+    serializer_class=ProofSerializer
+    def get(self,request):
+        se=self.get_serializer(instance=self.get_queryset(),many=True)
+        return Response(se.data)
+    def post(self,request):
+        data=request.data
+        se=self.get_serializer(data=data)
+        if (se.is_valid(raise_exception=True)):
+            se.save()
+            return Response({'code':100,'msg':'Successfully created.'})
+    def delete(self,request):
+        stu=self.get_object()
+        stu.delete()
+        return Response({'code':100,'msg':'Successfully deleted.'})  
+
+class ProofView(GenericAPIView):  
+    queryset=Proof.objects.all()
+    serializer_class=ProofSerializer
+    lookup_field='id'
+    def get(self,request,id):
+        ac=self.get_object()
+        se= self.get_serializer(instance=ac)
+        return Response(se.data) 
+
+class ApplicationView(GenericAPIView):
+    queryset=Application.objects.all()
+    serializer_class=ApplicationSerializer
+    lookup_field='id'
+    def get(self,request,id):
+        ac=self.get_object()
+        se= self.get_serializer(instance=ac)
+        return Response(se.data) 
     
-    
+class AdminApplicationView(GenericAPIView):
+    queryset=Application.objects.all()
+    serializer_class=ApplicationSerializer
+    def get(self,request):
+        se=self.get_serializer(instance=self.get_queryset(),many=True)
+        return Response(se.data)
+    def post(self,request):
+        data=request.data
+        se=self.get_serializer(data=data)
+        if (se.is_valid(raise_exception=True)):
+            se.save()
+            return Response({'code':100,'msg':'Successfully created.'})
+    def delete(self,request):
+        stu=self.get_object()
+        stu.delete()
+        return Response({'code':100,'msg':'Successfully deleted.'})    
    
     
     
