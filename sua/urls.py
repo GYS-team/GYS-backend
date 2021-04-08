@@ -32,9 +32,9 @@ urlpatterns = [
     path('activity/<int:id>',views.ActivityView.as_view()),
     path('activity/admin/',views.AdminActivityView.as_view()),
     path('auth/',views.Auth.as_view()),
-    #path('admin/proof/',views.AdminProofView.as_view()),
+    path('admin/proof/',views.AdminProofView.as_view()),
     path('proof/<int:id>',views.ProofView.as_view()),
-    #path('admin/application/',views.AdminApplicationView.as_view()),
+    path('admin/application/',views.AdminApplicationView.as_view()),
     path('application/<int:id>',views.ApplicationView.as_view()),
    
 ]

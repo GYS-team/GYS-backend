@@ -134,7 +134,8 @@ class AdminStudentView(GenericAPIView):
             se.save()
             return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
-        stu=self.get_object()
+        Id=request.query_params['id']
+        stu=self.get_queryset().filter(id=Id)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})
 
@@ -159,9 +160,10 @@ class AdminSuaView(GenericAPIView):
             se.save()
             return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
-        stu=self.get_object()
+        Id=request.query_params['id']
+        stu=self.get_queryset().filter(id=Id)
         stu.delete()
-        return Response({'code':100,'msg':'Successfully deleted.'})  
+        return Response({'code':100,'msg':'Successfully deleted.'})
 class ActivityView(GenericAPIView):
     queryset=Activity.objects.all()
     serializer_class=ActivitySerializer
@@ -184,7 +186,8 @@ class AdminActivityView(GenericAPIView):
             se.save()
             return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
-        stu=self.get_object()
+        Id=request.query_params['id']
+        stu=self.get_queryset().filter(id=Id)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})  
 
@@ -201,9 +204,10 @@ class AdminProofView(GenericAPIView):
             se.save()
             return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
-        stu=self.get_object()
+        Id=request.query_params['id']
+        stu=self.get_queryset().filter(id=Id)
         stu.delete()
-        return Response({'code':100,'msg':'Successfully deleted.'})  
+        return Response({'code':100,'msg':'Successfully deleted.'}) 
 
 class ProofView(GenericAPIView):  
     queryset=Proof.objects.all()
@@ -236,9 +240,10 @@ class AdminApplicationView(GenericAPIView):
             se.save()
             return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
-        stu=self.get_object()
+        Id=request.query_params['id']
+        stu=self.get_queryset().filter(id=Id)
         stu.delete()
-        return Response({'code':100,'msg':'Successfully deleted.'})    
+        return Response({'code':100,'msg':'Successfully deleted.'})  
    
     
     
