@@ -16,6 +16,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path,include
 from . import views
+from rest_framework.documentation import include_docs_urls
+
+    
 urlpatterns = [
     #path('',views.Login,name='check'),
     #path('index/',views.index),
@@ -24,7 +27,9 @@ urlpatterns = [
     #path('applications/',views.applications,name='applications'),
     #以上是Django路由配置
     #以下是DRF路由配置
-    #path('api-auth/', include('rest_framework.urls')),    
+    #path('api-auth/', include('rest_framework.urls')),   
+    path('docs/', include_docs_urls(title='文档')),
+    path('index/<int:id>',views.IndexView.as_view()),
     path('student/<int:id>',views.StudentView.as_view()),
     path('student/admin/',views.AdminStudentView.as_view()),
     path('sua/<int:id>',views.SuaView.as_view()),
@@ -32,9 +37,9 @@ urlpatterns = [
     path('activity/<int:id>',views.ActivityView.as_view()),
     path('activity/admin/',views.AdminActivityView.as_view()),
     path('auth/',views.Auth.as_view()),
-    path('admin/proof/',views.AdminProofView.as_view()),
+    path('proof/admin/',views.AdminProofView.as_view()),
     path('proof/<int:id>',views.ProofView.as_view()),
-    path('admin/application/',views.AdminApplicationView.as_view()),
+    path('application/admin/',views.AdminApplicationView.as_view()),
     path('application/<int:id>',views.ApplicationView.as_view()),
    
 ]

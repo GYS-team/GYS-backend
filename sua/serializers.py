@@ -1,17 +1,28 @@
 from rest_framework import serializers
 from .models import *
+
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
         model=User
         fields=['id','username']
+class UserFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=User
+        fields=['username','password']
 class StudentInfoSerializer(serializers.ModelSerializer):
-    #def create(self,validated_data):
-    #    new_user=User.objects.create(**validated_data.pop("user"))
-     #   new_stu=StudentInfo.objects.create(user=new_user,**validated_data)
-     #   return new_stu
+    user=UserFullSerializer(write_only=True)
+    def create(self,validated_data):
+        new_user=User.objects.create(**validated_data.pop("user"))
+        new_stu=StudentInfo.objects.create(user=new_user,**validated_data)
+        return new_stu
     class Meta:
         model=StudentInfo   
         fields="__all__"
+        extra_kwargs={
+            "user":{'help_text':'student对象对应的user对象'},
+            "name":{'help_text':'学生姓名'},
+            "number":{'help_text':'学号'}
+        }
     
 class ActivitySerializer(serializers.ModelSerializer):
     #def create(self,validated_data):
@@ -28,6 +39,9 @@ class ActivitySerializer(serializers.ModelSerializer):
     class Meta:
         model=Activity
         fields="__all__"
+        extra_kwargs={
+            "owner":{'help_text':'The organizer of activity,represented by his student_id'}
+        }
 
 class SuaSerializer(serializers.ModelSerializer):
     #student=StudentInfoSerializer()
@@ -45,5 +59,15 @@ class ApplicationSerializer(serializers.ModelSerializer):
         model=Application
         fields="__all__"
        
-    
+class ActivityFullSerializer(serializers.ModelSerializer):
+    class Meta:
+        model=Activity
+        fields=["created","title","detail"]
+
+class SuaFullSerializer(serializers.ModelSerializer):
+    activity=ActivityFullSerializer()
+    class Meta:
+        model=Sua
+        fields=["activity","suahours"]
+        
     
