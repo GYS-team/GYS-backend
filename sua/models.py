@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
+from .storage import FileStorage
 import datetime
 YEAR_CHOICES = []
 for r in range(2016, datetime.datetime.now().year+1):
@@ -44,7 +45,7 @@ class Activity(models.Model):
     title = models.CharField(max_length=100)
     detail = models.CharField(max_length=400)
     is_valid = models.BooleanField(default=False)
-
+    is_created_by_admin=models.BooleanField(default=False)
     def __str__(self):
         return self.title
 
@@ -75,15 +76,13 @@ class Proof(models.Model):
     )
     created = models.DateTimeField(auto_now_add=True)
     is_offline = models.BooleanField(default=False)
-    
+    proof_file = models.FileField(
+        upload_to='proofs',
+        storage=FileStorage(),
+        blank=True,
+    )
 
-    def __str__(self):
-        if self.is_offline:
-            return '线下证明'
-        else:
-            return self.owner.username +\
-                '_' +\
-                self.created.strftime("%Y%m%d%H%M%S")
+    
 
 
 class Application(models.Model):
@@ -104,7 +103,7 @@ class Application(models.Model):
         related_name='applications',
         on_delete=models.CASCADE,
     )
-    is_checked = models.BooleanField(default=False) 
+    is_checked = models.BooleanField(default=False) #是否已经由owner提交
     status = models.IntegerField(default=0)  # 0: 通过; 1: 未通过; 2: 需要线下证明
     feedback = models.CharField(max_length=400, blank=True)
    

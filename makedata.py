@@ -1,3 +1,7 @@
+import os
+os.system("del db.sqlite3")
+os.system("del proofs")
+os.system("cd sua")
 ActivityTitle=['Hello','Haha','Cool','Ohhhhh','God','fuck','gosh','goodbye','nmsl','goddamnit']
 UserName=['ckh','cxc','dd','dzx','lhb','czm','abc','abc1','abc2']
 import os,django
@@ -8,6 +12,11 @@ django.setup()
 from django.contrib.auth.models import User
 from sua.models import *
 import random
+def suahours_init():
+    for i in range(len(UserName)):
+        stu=User.objects.get(id=i+1).studentinfo
+        stu.suahours=stu.get_suahours()
+        stu.save()
 #每次开始时重置数据库
 os.system("python manage.py makemigrations sua")
 os.system("python manage.py migrate")
@@ -15,18 +24,24 @@ for i in range(len(UserName)):
     user= User.objects.create_user(username=str(19337001+i),password='123')
     user.save()
 for i in range(len(UserName)):
-    stu=StudentInfo(user=User.objects.get(id=i+1),name=UserName[i],number=User.objects.get(id=i+1).username)
+    stu=StudentInfo(user=User.objects.get(id=i+1),name=UserName[i],number=User.objects.get(id=i+1).username,power=1)
     stu.save()
 for ac in ActivityTitle:
-    activity=Activity(title=ac,owner=StudentInfo.objects.get(id=random.randint(1,len(UserName))))
+    activity=Activity(title=ac,owner=StudentInfo.objects.get(id=random.randint(1,len(UserName))),is_valid=True)
     activity.save()
 for i in StudentInfo.objects.all():
-    for j in range(50):
-        sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))),suahours=random.randint(1,10))
+    for j in range(10):
+        sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))),suahours=random.randint(1,10),is_valid=True)
         sua.save()
+'''
 for i in StudentInfo.objects.all():
    proof=Proof.objects.create(owner=i)
    proof.save()
-   application=Application.objects.create(proof=proof,owner=i,sua=Sua.objects.get(id=random.randint(1,Sua.objects.count())))
+   sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))),suahours=random.randint(1,10),is_valid=False)
+   sua.save()
+   application=Application.objects.create(proof=proof,owner=i,sua=sua)
    application.save()
-    
+   proof=Proof.objects.create(owner=i)
+   proof.save()
+'''
+suahours_init()

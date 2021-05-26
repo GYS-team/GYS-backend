@@ -17,7 +17,27 @@ from django.contrib import admin
 from django.urls import path,include
 from . import views
 from rest_framework.documentation import include_docs_urls
-
+from . import AdminViews
+authurl=[
+    path('login/',views.LoginView.as_view()),
+    path('logout/',views.LogoutView.as_view()),
+    path('changepassword/',views.ChangePw.as_view()),
+]
+studenturl=[
+    
+    path('index/',views.IndexView.as_view()),
+    path('student/',views.StudentView.as_view()),
+    path('sua/',views.SuaView.as_view()),
+    path('activity/<int:id>',views.ActivityView.as_view()),    
+    path('application/',views.ApplicationView.as_view()),      
+    path('proof/',views.ProofView.as_view()),
+]
+adminurl=[path('student/admin/',AdminViews.AdminStudentView.as_view()),
+    path('activity/admin/',AdminViews.AdminActivityView.as_view()),
+    path('proof/admin/',AdminViews.AdminProofView.as_view()),
+    path('sua/admin/',AdminViews.AdminSuaView.as_view()),
+    path('application/admin/',AdminViews.AdminApplicationView.as_view())
+]
     
 urlpatterns = [
     #path('',views.Login,name='check'),
@@ -29,17 +49,4 @@ urlpatterns = [
     #以下是DRF路由配置
     #path('api-auth/', include('rest_framework.urls')),   
     path('docs/', include_docs_urls(title='文档')),
-    path('index/<int:id>',views.IndexView.as_view()),
-    path('student/<int:id>',views.StudentView.as_view()),
-    path('student/admin/',views.AdminStudentView.as_view()),
-    path('sua/<int:id>',views.SuaView.as_view()),
-    path('sua/admin/',views.AdminSuaView.as_view()),
-    path('activity/<int:id>',views.ActivityView.as_view()),
-    path('activity/admin/',views.AdminActivityView.as_view()),
-    path('auth/',views.Auth.as_view()),
-    path('proof/admin/',views.AdminProofView.as_view()),
-    path('proof/<int:id>',views.ProofView.as_view()),
-    path('application/admin/',views.AdminApplicationView.as_view()),
-    path('application/<int:id>',views.ApplicationView.as_view()),
-   
-]
+]+authurl+studenturl+adminurl
