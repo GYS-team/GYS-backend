@@ -1,3 +1,4 @@
+from django.utils.translation import activate
 from rest_framework import serializers
 from .models import *
 
@@ -29,20 +30,20 @@ class ActivitySerializer(serializers.ModelSerializer):
     #展示活动详情用
     class Meta:
         model=Activity
-        exclude=["owner","is_valid"]
+        exclude=["owner","is_valid","is_created_by_admin"]
 
 class SuaSerializer(serializers.ModelSerializer):
     activity=ActivitySerializer()
     #给application用的
     class Meta:
         model=Sua
-        exclude=['is_valid','student']
-    #Todo:update students' suahours when creating sua
+        exclude=['is_valid','student','added']
+    
 class ProofSerializer(serializers.ModelSerializer):
     class Meta:
         model=Proof
         exclude=['owner']
-        
+    
 class ApplicationSerializer(serializers.ModelSerializer):
     #查询申请
     sua=SuaSerializer()
@@ -63,6 +64,23 @@ class ApplicationSerializer(serializers.ModelSerializer):
         new_ac.save()
         new_sua.save()
         return new_app
+    def update(self,obj,validated_data):
+        sua_data=validated_data.pop('sua',None)
+        ac_data=sua_data.pop('activity',None)
+        proof_data=validated_data.pop('proof',None)
+        pf=Proof.objects.filter(id=obj.proof.id)
+        sua=Sua.objects.filter(id=obj.sua.id)
+        ac=Activity.objects.filter(id=obj.sua.activity.id)
+        if (proof_data is not None):
+            pf.update(**proof_data)
+        if (ac_data is not None):
+            ac.update(**ac_data)
+        if (sua_data is not None):
+            sua.update(**sua_data)
+        app=Application.objects.filter(id=obj.id)
+        if (validated_data is not None):
+            app.update(**validated_data)
+        return obj
     class Meta:
         model=Application
         exclude=["owner"]

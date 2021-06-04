@@ -18,6 +18,8 @@ from django.urls import path,include
 from . import views
 from rest_framework.documentation import include_docs_urls
 from . import AdminViews
+from django.conf import settings
+from django.conf.urls.static import static
 authurl=[
     path('login/',views.LoginView.as_view()),
     path('logout/',views.LogoutView.as_view()),
@@ -36,7 +38,8 @@ adminurl=[path('student/admin/',AdminViews.AdminStudentView.as_view()),
     path('activity/admin/',AdminViews.AdminActivityView.as_view()),
     path('proof/admin/',AdminViews.AdminProofView.as_view()),
     path('sua/admin/',AdminViews.AdminSuaView.as_view()),
-    path('application/admin/',AdminViews.AdminApplicationView.as_view())
+    path('application/admin/',AdminViews.AdminApplicationView.as_view()),
+    path('changepw/admin/',AdminViews.AdminChangePw.as_view()),
 ]
     
 urlpatterns = [
@@ -49,4 +52,4 @@ urlpatterns = [
     #以下是DRF路由配置
     #path('api-auth/', include('rest_framework.urls')),   
     path('docs/', include_docs_urls(title='文档')),
-]+authurl+studenturl+adminurl
+]+authurl+studenturl+adminurl+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

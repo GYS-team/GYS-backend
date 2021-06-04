@@ -66,6 +66,7 @@ class Sua(models.Model):
     )
     suahours = models.FloatField(default=0.0)
     is_valid=models.BooleanField(default=False)
+    added=models.BooleanField(default=False)
 
 
 class Proof(models.Model):
@@ -97,14 +98,14 @@ class Application(models.Model):
         on_delete=models.CASCADE,
     )
     created = models.DateTimeField('创建日期', default=timezone.now)
-    contact = models.CharField(max_length=100, blank=True) # 不明字段
+    contact = models.CharField(max_length=100, blank=True) #联系方式
     proof = models.OneToOneField(
         Proof,
         related_name='applications',
         on_delete=models.CASCADE,
     )
     is_checked = models.BooleanField(default=False) #是否已经由owner提交
-    status = models.IntegerField(default=0)  # 0: 通过; 1: 未通过; 2: 需要线下证明
+    status = models.IntegerField(default=0)  # 0: 待审核，1：通过 2：不通过
     feedback = models.CharField(max_length=400, blank=True)
    
 

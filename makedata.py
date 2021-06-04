@@ -31,7 +31,7 @@ for ac in ActivityTitle:
     activity.save()
 for i in StudentInfo.objects.all():
     for j in range(10):
-        sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))),suahours=random.randint(1,10),is_valid=True)
+        sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))),suahours=random.randint(1,10),is_valid=True,added=True)
         sua.save()
 '''
 for i in StudentInfo.objects.all():

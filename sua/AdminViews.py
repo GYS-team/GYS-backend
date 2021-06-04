@@ -8,10 +8,11 @@ from .adminserializers import *
 from django.views import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.generics import GenericAPIView
 from .permissions import AdminPermissions
 from rest_framework.pagination import PageNumberPagination
+
 class AdminStudentView(GenericAPIView):
     permission_classes = [AdminPermissions]
     #pagination_class=PageNumberPagination
@@ -29,8 +30,13 @@ class AdminStudentView(GenericAPIView):
     queryset=StudentInfo.objects.all()
     serializer_class=StudentInfoSerializer
     def get(self,request):
-        se=self.get_serializer(instance=self.get_queryset(),many=True)
-        return Response(se.data)
+        if (request.GET.get('id',None)==None):
+            se=self.get_serializer(instance=self.get_queryset(),many=True)
+            return Response(se.data)
+        else:
+            stu=self.get_queryset().filter(id=request.GET['id'])
+            se=self.get_serializer(stu,many=True)
+            return Response(se.data)
     def post(self,request):
         data=request.data
         se=self.get_serializer(data=data)
@@ -42,6 +48,13 @@ class AdminStudentView(GenericAPIView):
         stu=self.get_queryset().filter(id=Id)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})
+    def put(self,request):        
+        data=request.data
+        obj=self.get_queryset().get(id=data.pop('id'))
+        se=self.get_serializer(instance=obj,data=data,partial=True)   
+        if (se.is_valid(raise_exception=True)):
+            se.save()        
+        return Response({'code':100,'msg':'Successfully updated.'})
 
 class AdminSuaView(GenericAPIView):
     permission_classes = [AdminPermissions]
@@ -64,19 +77,31 @@ class AdminSuaView(GenericAPIView):
         return self.get_paginated_response(se.data)
     def post(self,request):
         data=request.data
-        se=self.get_serializer(data=data)
-        if (se.is_valid(raise_exception=True)):
-            se.save()
-            return Response({'code':100,'msg':'Successfully created.'})
+        if isinstance(data,list):
+            se=self.get_serializer(data=data,many=True)
+            if (se.is_valid(raise_exception=True)):
+                se.save()
+                return Response({'code':100,'msg':'Successfully created.'})
+        if isinstance(data,dict):
+            se=self.get_serializer(data=data)
+            if (se.is_valid(raise_exception=True)):
+                se.save()
+                return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
         Id=request.query_params['id']
         stu=self.get_queryset().filter(id=Id)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})
+    def put(self,request):
+        data=request.data
+        obj=self.get_queryset().get(id=data.pop('id'))
+        se=self.get_serializer(instance=obj,data=data,partial=True)
+        if (se.is_valid(raise_exception=True)):
+            se.save()
+        return Response({'code':100,'msg':'Successfully updated.'})    
 
 class AdminApplicationView(GenericAPIView):
     permission_classes = [AdminPermissions]
-    pagination_class=PageNumberPagination
     """
     get:
     请求返回所有申请信息。
@@ -87,15 +112,35 @@ class AdminApplicationView(GenericAPIView):
     根据申请编号删除申请信息。
 
     """
-    queryset=Application.objects.all()
+    queryset=Application.objects.filter(is_checked=True)
     serializer_class=ApplicationSerializer
     def get(self,request):
-        se=self.get_serializer(instance=self.paginate_queryset(self.queryset),many=True)
-        return self.get_paginated_response(se.data)
+        se=self.get_serializer(instance=self.get_queryset(),many=True)
+        return Response(se.data)
+    def put(self,request):
+        data=request.data.copy()
+        obj=self.get_queryset().get(id=data.pop('id'))
+        if (obj.status!=0):
+            return Response({'code':200,'msg':'No Permissions'})
+        se=self.get_serializer(instance=obj,data=data,partial=True)
+        if (se.is_valid(raise_exception=True)):
+            se.save()            
+            if (obj.status==1 and obj.sua.added==False):                
+                obj.sua.added=True                
+                obj.owner.suahours+=obj.sua.suahours                
+            if (obj.status==2 and obj.sua.added==True):
+                obj.sua.added=False
+                obj.owner.suahours-=obj.sua.suahours
+                print(obj.owner.suahours)
+            obj.owner.save()
+            obj.sua.save()
+            return Response({'code':100,'msg':'Successfully updated.'})
+
+
     
     def delete(self,request):
         Id=request.query_params['id']
-        stu=self.get_queryset().filter(id=Id)
+        stu=self.get_queryset().get(id=Id)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})  
 class AdminProofView(GenericAPIView):
@@ -135,23 +180,41 @@ class AdminActivityView(GenericAPIView):
     put:
     根据活动编号和数据更改活动信息。
     """
-    queryset=Activity.objects.all()
+    queryset=Activity.objects.filter(is_created_by_admin=True)
     serializer_class=ActivitySerializer
     def get(self,request):
         se=self.get_serializer(instance=self.get_queryset(),many=True)
         return Response(se.data)
     def post(self,request):
         data=request.data
-        se=self.get_serializer(data=data)
+        se=self.get_serializer(data=data)               
         if (se.is_valid(raise_exception=True)):
-            se.save()
+            se.save(owner=request.user.studentinfo)
             return Response({'code':100,'msg':'Successfully created.'})
     def put(self,request):
         data=request.data
-        obj=self.get_queryset
+        obj=self.get_queryset().get(id=data.pop('id'))
         se=self.get_serializer(instance=obj,data=data,partial=True)
         if (se.is_valid(raise_exception=True)):
             se.save()
+            if (se.is_valid(raise_exception=True)):
+                print(obj.is_valid)
+                if (obj.is_valid==True):
+                    for sua in obj.suas.all():
+                        if (sua.added==False):
+                            sua.added=True
+                            sua.is_valid=True
+                            sua.student.suahours+=sua.suahours
+                            sua.save()
+                            sua.student.save()
+                if (obj.is_valid==False):
+                    for sua in obj.sua.all():
+                        if (sua.added==True):
+                            sua.added=False
+                            sua.is_valid=False
+                            sua.student.suahours+=sua.suahours
+                            sua.save()
+                            sua.student.save()
             return Response({'code':100,'msg':'Successfully updated.'})
 
     def delete(self,request):
@@ -159,3 +222,12 @@ class AdminActivityView(GenericAPIView):
         stu=self.get_queryset().filter(id=Id)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})  
+
+class AdminChangePw(APIView):
+    kpermission_classes=[AdminPermissions]
+    def post(self,request):
+        new_pw=request.data['password']
+        user=StudentInfo.objects.get(id=request.data['id']).user
+        user.set_password(new_pw)
+        user.save()
+        return Response('{result:1}')

@@ -128,6 +128,13 @@ class ApplicationView(GenericAPIView):
         if (se.is_valid(raise_exception=True)):
             se.save(stu=request.user.studentinfo)
             return Response({'code':100,'msg':'Successfully created.'})
+    def put(self,request):
+        data=request.data.copy()
+        obj=self.get_queryset().get(id=data.pop('id'))
+        se=self.get_serializer(instance=obj,data=data,partial=True)
+        if (se.is_valid(raise_exception=True)):
+            se.save()
+        return Response({'code':100,'msg':'Successfully updated.'})
 class ProofView(GenericAPIView):
     '''
     post:
