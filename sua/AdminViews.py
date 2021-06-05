@@ -76,13 +76,17 @@ class AdminSuaView(GenericAPIView):
         se=self.get_serializer(instance=self.paginate_queryset(self.queryset),many=True)
         return self.get_paginated_response(se.data)
     def post(self,request):
-        data=request.data
+        data=request.data.copy()
+        
         if isinstance(data,list):
+            for item in data:
+                item['student']=User.objects.get(username=item['student']).studentinfo.id
             se=self.get_serializer(data=data,many=True)
             if (se.is_valid(raise_exception=True)):
                 se.save()
                 return Response({'code':100,'msg':'Successfully created.'})
         if isinstance(data,dict):
+            data['student']=User.objects.get(username=data['student']).studentinfo.id
             se=self.get_serializer(data=data)
             if (se.is_valid(raise_exception=True)):
                 se.save()
@@ -93,6 +97,7 @@ class AdminSuaView(GenericAPIView):
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})
     def put(self,request):
+        #仅仅支持valid字段的修改
         data=request.data
         obj=self.get_queryset().get(id=data.pop('id'))
         se=self.get_serializer(instance=obj,data=data,partial=True)
@@ -145,9 +150,6 @@ class AdminApplicationView(GenericAPIView):
         return Response({'code':100,'msg':'Successfully deleted.'})  
 class AdminProofView(GenericAPIView):
     permission_classes = [AdminPermissions]
-    """
-    待更新，因为涉及文件传输问题。
-    """
     queryset=Proof.objects.all()
     serializer_class=ProofSerializer
     def get(self,request):
@@ -208,11 +210,11 @@ class AdminActivityView(GenericAPIView):
                             sua.save()
                             sua.student.save()
                 if (obj.is_valid==False):
-                    for sua in obj.sua.all():
+                    for sua in obj.suas.all():
                         if (sua.added==True):
                             sua.added=False
                             sua.is_valid=False
-                            sua.student.suahours+=sua.suahours
+                            sua.student.suahours-=sua.suahours
                             sua.save()
                             sua.student.save()
             return Response({'code':100,'msg':'Successfully updated.'})

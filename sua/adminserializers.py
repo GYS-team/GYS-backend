@@ -47,17 +47,8 @@ class ActivitySerializer(serializers.ModelSerializer):
 
 
 class SuaSerializer(serializers.ModelSerializer):
-    #已弃用，仅作代码保存
     #student=StudentInfoBasicSerializer()
     #activity=ActivitySerializer()
-    def update(self,obj,validated_data):
-        user=User.objects.get(username=validated_data.pop('student'))
-        stu=user.StudentInfo
-        obj.update(student=stu,**validated_data)
-        return obj
-    def validate_student(self,data):
-        print('!')
-        return True
 
     class Meta:
         model=Sua

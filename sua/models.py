@@ -7,6 +7,7 @@ YEAR_CHOICES = []
 for r in range(2016, datetime.datetime.now().year+1):
     YEAR_CHOICES.append((r, r))
 # Create your models here.
+
 class StudentInfo(models.Model):
     user = models.OneToOneField(
         User,  

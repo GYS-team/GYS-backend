@@ -10,7 +10,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.generics import GenericAPIView
-from .permissions import AdminPermissions
+from .permissions import ActivityPermissions, AdminPermissions
 from rest_framework.pagination import PageNumberPagination
 from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
@@ -93,7 +93,7 @@ class StudentView(GenericAPIView):
         return Response(se.data)    
 
 class ActivityView(GenericAPIView):
-    permission_classes=[IsAuthenticated]
+    permission_classes=[IsAuthenticated,ActivityPermissions]
     """
     
     通过活动编号查询活动信息。

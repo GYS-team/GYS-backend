@@ -1,6 +1,6 @@
 import os
 os.system("del db.sqlite3")
-os.system("del proofs")
+os.system("del proofs/proofs")
 os.system("cd sua")
 ActivityTitle=['Hello','Haha','Cool','Ohhhhh','God','fuck','gosh','goodbye','nmsl','goddamnit']
 UserName=['ckh','cxc','dd','dzx','lhb','czm','abc','abc1','abc2']
@@ -23,16 +23,24 @@ os.system("python manage.py migrate")
 for i in range(len(UserName)):
     user= User.objects.create_user(username=str(19337001+i),password='123')
     user.save()
+print('successfully created %d Users.' % i)
 for i in range(len(UserName)):
     stu=StudentInfo(user=User.objects.get(id=i+1),name=UserName[i],number=User.objects.get(id=i+1).username,power=1)
     stu.save()
+print('successfully created %d StudentInfo.' % i)
+count=0
 for ac in ActivityTitle:
+    count+=1
     activity=Activity(title=ac,owner=StudentInfo.objects.get(id=random.randint(1,len(UserName))),is_valid=True)
     activity.save()
+print('successfully created %d Activities.' % count)
+count=0
 for i in StudentInfo.objects.all():
     for j in range(10):
         sua=Sua(student=i,activity=Activity.objects.get(id=random.randint(1,len(ActivityTitle))),suahours=random.randint(1,10),is_valid=True,added=True)
         sua.save()
+        count+=1
+print('succesfully created %d suas'% count)
 '''
 for i in StudentInfo.objects.all():
    proof=Proof.objects.create(owner=i)
