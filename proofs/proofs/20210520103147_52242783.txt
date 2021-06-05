@@ -1,6 +1,0 @@
-cmake：作用是生成makefile
-make：本质上调用了mingw下的make，所以需要cmake -G "Unix makefiles"
-
-cmake_minimum_required(VERSION 3.5)  声明最小适用版本
-project (hello_cmake)  声明项目名称
-add_executable(hello_cmake main.cpp)  第一个参数是生成exe名字，第二个是源文件，第一个也可以写${PORJECT_NAME}
