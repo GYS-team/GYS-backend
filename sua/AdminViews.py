@@ -10,11 +10,11 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.permissions import IsAdminUser, IsAuthenticated
 from rest_framework.generics import GenericAPIView
-from .permissions import AdminPermissions
+from .permissions import AdminPermissions,SuperAdminPermissions
 from rest_framework.pagination import PageNumberPagination
 
 class AdminStudentView(GenericAPIView):
-    permission_classes = [AdminPermissions]
+    permission_classes = [SuperAdminPermissions]
     #pagination_class=PageNumberPagination
     """
     get:
@@ -27,7 +27,7 @@ class AdminStudentView(GenericAPIView):
     根据学生编号删除学生。
 
     """
-    queryset=StudentInfo.objects.all()
+    queryset=StudentInfo.object.all()
     serializer_class=StudentInfoSerializer
     def get(self,request):
         if (request.GET.get('id',None)==None):
@@ -45,7 +45,9 @@ class AdminStudentView(GenericAPIView):
             return Response({'code':100,'msg':'Successfully created.'})
     def delete(self,request):
         Id=request.query_params['id']
+        print(Id)
         stu=self.get_queryset().filter(id=Id)
+        print(stu)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})
     def put(self,request):        
@@ -70,7 +72,7 @@ class AdminSuaView(GenericAPIView):
     根据sua编号删除sua信息。
 
     """
-    queryset=Sua.objects.all()
+    queryset=Sua.object.all()
     serializer_class=SuaSerializer
     def get(self,request):
         se=self.get_serializer(instance=self.paginate_queryset(self.queryset),many=True)
@@ -106,7 +108,7 @@ class AdminSuaView(GenericAPIView):
         return Response({'code':100,'msg':'Successfully updated.'})    
 
 class AdminApplicationView(GenericAPIView):
-    permission_classes = [AdminPermissions]
+    permission_classes = [SuperAdminPermissions]
     """
     get:
     请求返回所有申请信息。
@@ -117,7 +119,7 @@ class AdminApplicationView(GenericAPIView):
     根据申请编号删除申请信息。
 
     """
-    queryset=Application.objects.filter(is_checked=True)
+    queryset=Application.object.filter(is_checked=True)
     serializer_class=ApplicationSerializer
     def get(self,request):
         se=self.get_serializer(instance=self.get_queryset(),many=True)
@@ -149,8 +151,8 @@ class AdminApplicationView(GenericAPIView):
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})  
 class AdminProofView(GenericAPIView):
-    permission_classes = [AdminPermissions]
-    queryset=Proof.objects.all()
+    permission_classes = [SuperAdminPermissions]
+    queryset=Proof.object.all()
     serializer_class=ProofSerializer
     def get(self,request):
         se=self.get_serializer(instance=self.paginate_queryset(self.queryset),many=True)
@@ -182,13 +184,13 @@ class AdminActivityView(GenericAPIView):
     put:
     根据活动编号和数据更改活动信息。
     """
-    queryset=Activity.objects.filter(is_created_by_admin=True)
+    queryset=Activity.object.filter(is_created_by_admin=True)
     serializer_class=ActivitySerializer
     def get(self,request):
         se=self.get_serializer(instance=self.get_queryset(),many=True)
         if (request.GET.get('id',None)!=None):
-            id=request.GET['id']
-            suas=Activity.objects.get(id=id).suas.all()
+            id=request.query_params['id']
+            suas=Activity.object.get(id=id).suas.all()
             se=SuaFullSerializer(instance=suas,many=True)
             return Response(se.data)
         return Response(se.data)
@@ -204,37 +206,49 @@ class AdminActivityView(GenericAPIView):
         se=self.get_serializer(instance=obj,data=data,partial=True)
         if (se.is_valid(raise_exception=True)):
             se.save()
-            if (se.is_valid(raise_exception=True)):
-                print(obj.is_valid)
-                if (obj.is_valid==True):
-                    for sua in obj.suas.all():
-                        if (sua.added==False):
-                            sua.added=True
-                            sua.is_valid=True
-                            sua.student.suahours+=sua.suahours
-                            sua.save()
-                            sua.student.save()
-                if (obj.is_valid==False):
-                    for sua in obj.suas.all():
-                        if (sua.added==True):
-                            sua.added=False
-                            sua.is_valid=False
-                            sua.student.suahours-=sua.suahours
-                            sua.save()
-                            sua.student.save()
+            
+            if ((se.validated_data.get('is_valid',None)!=None) and request.user.studentinfo.power<2):
+                return Response("Bad Permissions")# todo
+            if (obj.is_valid==True):
+                for sua in obj.suas.all():
+                    if (sua.added==False):
+                        sua.added=True
+                        sua.is_valid=True
+                        sua.student.suahours+=sua.suahours
+                        sua.save()
+                        sua.student.save()
+            if (obj.is_valid==False):
+                for sua in obj.suas.all():
+                    if (sua.added==True):
+                        sua.added=False
+                        sua.is_valid=False
+                        sua.student.suahours-=sua.suahours
+                        sua.save()
+                        sua.student.save()
             return Response({'code':100,'msg':'Successfully updated.'})
 
     def delete(self,request):
         Id=request.query_params['id']
+        print(Id)
         stu=self.get_queryset().filter(id=Id)
+        print(stu)
         stu.delete()
         return Response({'code':100,'msg':'Successfully deleted.'})  
 
 class AdminChangePw(APIView):
-    kpermission_classes=[AdminPermissions]
+    permission_classes=[SuperAdminPermissions]
     def post(self,request):
         new_pw=request.data['password']
-        user=StudentInfo.objects.get(id=request.data['id']).user
+        user=StudentInfo.object.get(id=request.data['id']).user
         user.set_password(new_pw)
         user.save()
         return Response('{result:1}')
+
+class AdminDeleteRecord(APIView):
+    def get(self,request):
+        stu=StudentInfo.objects.filter(is_deleted=True)
+        stu_se=StudentInfoSerializer(instance=stu,many=True)
+        ac=Activity.objects.filter(is_deleted=True)
+        print(ac)
+        ac_se=ActivitySerializer(instance=ac,many=True)
+        return Response([stu_se.data,ac_se.data])

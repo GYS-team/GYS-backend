@@ -15,7 +15,7 @@ class StudentInfoSerializer(serializers.ModelSerializer):
     user=UserFullSerializer(write_only=True)
     def create(self,validated_data):
         new_user=User.objects.create(**validated_data.pop("user"))
-        new_stu=StudentInfo.objects.create(user=new_user,**validated_data)
+        new_stu=StudentInfo.object.create(user=new_user,**validated_data)
         return new_stu
     class Meta:
         model=StudentInfo   
@@ -53,13 +53,13 @@ class ApplicationSerializer(serializers.ModelSerializer):
         sua_data=validated_data['sua']
         del sua_data['activity']
         stu=validated_data.pop('stu')
-        new_ac=Activity.objects.create(**ac_data,owner=stu)
-        new_sua=Sua.objects.create(**sua_data,activity=new_ac,student=stu)
+        new_ac=Activity.object.create(**ac_data,owner=stu)
+        new_sua=Sua.object.create(**sua_data,activity=new_ac,student=stu)
         del validated_data['sua']
         app_data=validated_data
-        new_pf=Proof.objects.create(owner=stu,**validated_data.pop('proof'))
+        new_pf=Proof.object.create(owner=stu,**validated_data.pop('proof'))
         new_pf.save()
-        new_app=Application.objects.create(**app_data,sua=new_sua,owner=stu,proof=new_pf)
+        new_app=Application.object.create(**app_data,sua=new_sua,owner=stu,proof=new_pf)
         new_app.save()
         new_ac.save()
         new_sua.save()
@@ -68,16 +68,16 @@ class ApplicationSerializer(serializers.ModelSerializer):
         sua_data=validated_data.pop('sua',None)
         ac_data=sua_data.pop('activity',None)
         proof_data=validated_data.pop('proof',None)
-        pf=Proof.objects.filter(id=obj.proof.id)
-        sua=Sua.objects.filter(id=obj.sua.id)
-        ac=Activity.objects.filter(id=obj.sua.activity.id)
+        pf=Proof.object.filter(id=obj.proof.id)
+        sua=Sua.object.filter(id=obj.sua.id)
+        ac=Activity.object.filter(id=obj.sua.activity.id)
         if (proof_data is not None):
             pf.update(**proof_data)
         if (ac_data is not None):
             ac.update(**ac_data)
         if (sua_data is not None):
             sua.update(**sua_data)
-        app=Application.objects.filter(id=obj.id)
+        app=Application.object.filter(id=obj.id)
         if (validated_data is not None):
             app.update(**validated_data)
         return obj

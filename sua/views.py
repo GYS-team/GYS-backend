@@ -89,7 +89,7 @@ class StudentView(GenericAPIView):
     """
     serializer_class=StudentInfoSerializer
     def get(self,request):
-        stu=StudentInfo.objects.get(id=request.user.studentinfo.id)
+        stu=StudentInfo.object.get(id=request.user.studentinfo.id)
         se= self.get_serializer(instance=stu)
         return Response(se.data)    
 
@@ -99,7 +99,7 @@ class ActivityView(GenericAPIView):
     
     通过活动编号查询活动信息。
     """
-    queryset=Activity.objects.all()
+    queryset=Activity.object.all()
     serializer_class=ActivitySerializer
     lookup_field='id'
     def get(self,request,id):
@@ -117,10 +117,10 @@ class ApplicationView(GenericAPIView):
     post:
     创建新申请
     """    
-    queryset=Application.objects.all()
+    queryset=Application.object.all()
     serializer_class=ApplicationSerializer
     def get(self,request):
-        query=Application.objects.filter(owner=request.user.studentinfo)
+        query=Application.object.filter(owner=request.user.studentinfo)
         se= self.get_serializer(instance=query,many=True)
         return Response(se.data) 
     def post(self,request):
@@ -144,7 +144,7 @@ class ProofView(GenericAPIView):
     permission_classes=[IsAuthenticated]
     serializer_class=ProofSerializer
     def post(self,request):
-        stu=StudentInfo.objects.get(id=1)
+        stu=StudentInfo.object.get(id=1)
         data=request.data
         se=self.get_serializer(data=data)
         if (se.is_valid(raise_exception=True)):
@@ -157,7 +157,7 @@ class IndexView(APIView):
     这时返回的是学生的所有sua信息，足够展示其个人主页。
     '''
     def get(self,request):
-        sua=StudentInfo.objects.get(id=request.user.studentinfo.id).suas.all()
+        sua=StudentInfo.object.get(id=request.user.studentinfo.id).suas.all()
         se=SuaFullSerializer(instance=sua,many=True)
         return Response(se.data)   
     
@@ -170,7 +170,7 @@ class SuaView(GenericAPIView):
     通过sua编号查询sua信息。
     此API已弃用，仅作备份。
     """
-    queryset=Sua.objects.all()
+    queryset=Sua.object.all()
     serializer_class=SuaSerializer
     lookup_field='id'
     def get(self,request,id):

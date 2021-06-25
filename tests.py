@@ -1,8 +1,10 @@
-import os,django
+import django
 import json
 '''
 此文件未完成。
 '''
+import os
+
 os.environ['DJANGO_SETTINGS_MODULE']='backend.settings'
 django.setup()
 os.system("python makedata.py")

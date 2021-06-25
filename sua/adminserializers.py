@@ -13,7 +13,7 @@ class StudentInfoSerializer(serializers.ModelSerializer):
     user=UserFullSerializer()
     def create(self,validated_data):
         new_user=User.objects.create(**validated_data.pop("user"))
-        new_stu=StudentInfo.objects.create(user=new_user,**validated_data)
+        new_stu=StudentInfo.object.create(user=new_user,**validated_data)
         return new_stu
         
             
@@ -36,7 +36,7 @@ class StudentInfoBasicSerializer(serializers.ModelSerializer):
 class ActivitySerializer(serializers.ModelSerializer):
     def create(self,validated_data):
         owner=validated_data.pop('owner')
-        new_ac=Activity.objects.create(owner=owner,is_created_by_admin=True,**validated_data)
+        new_ac=Activity.object.create(owner=owner,is_created_by_admin=True,**validated_data)
         return new_ac
     class Meta:
         model=Activity

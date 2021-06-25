@@ -1,10 +1,10 @@
 from rest_framework import permissions
 
-class AdminPermissions(permissions.BasePermission):
+class SuperAdminPermissions(permissions.BasePermission):
 
     def has_permission(self, request, view):
         try:            
-            if (request.user.studentinfo.power>=1):
+            if (request.user.studentinfo.power==2):
                 return True
             else:
                 return False
@@ -17,4 +17,12 @@ class ActivityPermissions(permissions.BasePermission):
         else:
             return False
         
-#Todo:对象权限
+class AdminPermissions(permissions.BasePermission):
+    def has_permission(self, request, view):
+        try:
+            if (request.user.studentinfo.power>=1):
+                return True
+            else:
+                return False
+        except AttributeError:
+            return False

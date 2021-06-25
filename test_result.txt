@@ -1,103 +1,125 @@
 GET student/{
     "id":1,
+    "is_deleted":false,
+    "deleted_at":"22:57:08.042890",
     "number":"19337001",
-    "suahours":54.0,
+    "suahours":73.0,
     "classtype":"一班",
     "grade":2021,
     "phone":"000",
-    "power":1,
+    "power":2,
     "name":"ckh"
 }
 GET index/[
     {
         "activity":{
+            "id":5,
+            "is_deleted":false,
+            "deleted_at":"22:57:08.110021",
+            "created":"2021-06-25T22:57:08.110021+08:00",
+            "title":"God",
+            "detail":""
+        },
+        "suahours":4.0
+    },
+    {
+        "activity":{
+            "id":7,
+            "is_deleted":false,
+            "deleted_at":"22:57:08.136012",
+            "created":"2021-06-25T22:57:08.136012+08:00",
+            "title":"gosh",
+            "detail":""
+        },
+        "suahours":9.0
+    },
+    {
+        "activity":{
+            "id":3,
+            "is_deleted":false,
+            "deleted_at":"22:57:08.100026",
+            "created":"2021-06-25T22:57:08.100026+08:00",
+            "title":"Cool",
+            "detail":""
+        },
+        "suahours":5.0
+    },
+    {
+        "activity":{
             "id":4,
-            "created":"2021-06-25T16:24:06.329093+08:00",
+            "is_deleted":false,
+            "deleted_at":"22:57:08.104478",
+            "created":"2021-06-25T22:57:08.104478+08:00",
             "title":"Ohhhhh",
             "detail":""
         },
-        "suahours":8.0
-    },
-    {
-        "activity":{
-            "id":6,
-            "created":"2021-06-25T16:24:06.340057+08:00",
-            "title":"fuck",
-            "detail":""
-        },
-        "suahours":7.0
-    },
-    {
-        "activity":{
-            "id":4,
-            "created":"2021-06-25T16:24:06.329093+08:00",
-            "title":"Ohhhhh",
-            "detail":""
-        },
-        "suahours":3.0
-    },
-    {
-        "activity":{
-            "id":9,
-            "created":"2021-06-25T16:24:06.356278+08:00",
-            "title":"nmsl",
-            "detail":""
-        },
-        "suahours":1.0
+        "suahours":5.0
     },
     {
         "activity":{
             "id":5,
-            "created":"2021-06-25T16:24:06.334079+08:00",
+            "is_deleted":false,
+            "deleted_at":"22:57:08.110021",
+            "created":"2021-06-25T22:57:08.110021+08:00",
             "title":"God",
             "detail":""
         },
-        "suahours":2.0
-    },
-    {
-        "activity":{
-            "id":4,
-            "created":"2021-06-25T16:24:06.329093+08:00",
-            "title":"Ohhhhh",
-            "detail":""
-        },
-        "suahours":8.0
-    },
-    {
-        "activity":{
-            "id":6,
-            "created":"2021-06-25T16:24:06.340057+08:00",
-            "title":"fuck",
-            "detail":""
-        },
-        "suahours":4.0
+        "suahours":6.0
     },
     {
         "activity":{
             "id":9,
-            "created":"2021-06-25T16:24:06.356278+08:00",
+            "is_deleted":false,
+            "deleted_at":"22:57:08.148487",
+            "created":"2021-06-25T22:57:08.148487+08:00",
             "title":"nmsl",
             "detail":""
         },
-        "suahours":8.0
+        "suahours":5.0
     },
     {
         "activity":{
-            "id":10,
-            "created":"2021-06-25T16:24:06.361260+08:00",
-            "title":"goddamnit",
+            "id":5,
+            "is_deleted":false,
+            "deleted_at":"22:57:08.110021",
+            "created":"2021-06-25T22:57:08.110021+08:00",
+            "title":"God",
             "detail":""
         },
-        "suahours":4.0
+        "suahours":10.0
     },
     {
         "activity":{
-            "id":8,
-            "created":"2021-06-25T16:24:06.351022+08:00",
-            "title":"goodbye",
+            "id":5,
+            "is_deleted":false,
+            "deleted_at":"22:57:08.110021",
+            "created":"2021-06-25T22:57:08.110021+08:00",
+            "title":"God",
+            "detail":""
+        },
+        "suahours":10.0
+    },
+    {
+        "activity":{
+            "id":6,
+            "is_deleted":false,
+            "deleted_at":"22:57:08.114060",
+            "created":"2021-06-25T22:57:08.114060+08:00",
+            "title":"fuck",
             "detail":""
         },
         "suahours":9.0
+    },
+    {
+        "activity":{
+            "id":3,
+            "is_deleted":false,
+            "deleted_at":"22:57:08.100026",
+            "created":"2021-06-25T22:57:08.100026+08:00",
+            "title":"Cool",
+            "detail":""
+        },
+        "suahours":10.0
     }
 ]
 POST application/{
@@ -111,19 +133,27 @@ GET application/[
             "id":91,
             "activity":{
                 "id":11,
-                "created":"2021-06-25T16:24:07.577339+08:00",
+                "is_deleted":false,
+                "deleted_at":"22:57:09.256533",
+                "created":"2021-06-25T22:57:09.288836+08:00",
                 "title":"testing",
                 "detail":"100个公益时"
             },
+            "is_deleted":false,
+            "deleted_at":"22:57:09.263537",
             "suahours":100.0
         },
         "proof":{
             "id":1,
-            "created":"2021-06-25T16:24:07.557138+08:00",
+            "is_deleted":false,
+            "deleted_at":"22:57:09.270029",
+            "created":"2021-06-25T22:57:09.270029+08:00",
             "is_offline":true,
             "proof_file":null
         },
-        "created":"2021-06-25T16:24:07.567515+08:00",
+        "is_deleted":false,
+        "deleted_at":"22:57:09.280072",
+        "created":"2021-06-25T22:57:09.280072+08:00",
         "contact":"13612687802",
         "is_checked":true,
         "status":0,
@@ -140,7 +170,9 @@ GET application/admin/[
         "id":1,
         "proof":{
             "id":1,
-            "created":"2021-06-25T16:24:07.557138+08:00",
+            "is_deleted":false,
+            "deleted_at":"22:57:09.270029",
+            "created":"2021-06-25T22:57:09.270029+08:00",
             "is_offline":true,
             "proof_file":null,
             "owner":1
@@ -156,7 +188,9 @@ GET application/admin/[
             },
             "suahours":100.0
         },
-        "created":"2021-06-25T16:24:07.567515+08:00",
+        "is_deleted":false,
+        "deleted_at":"22:57:09.280072",
+        "created":"2021-06-25T22:57:09.280072+08:00",
         "contact":"136",
         "is_checked":true,
         "status":0,
@@ -170,12 +204,14 @@ PUT application/admin/{
 }
 申请已通过GET student/{
     "id":1,
+    "is_deleted":false,
+    "deleted_at":"22:57:08.042890",
     "number":"19337001",
-    "suahours":154.0,
+    "suahours":173.0,
     "classtype":"一班",
     "grade":2021,
     "phone":"000",
-    "power":1,
+    "power":2,
     "name":"ckh"
 }
 PUT application/admin/{
@@ -184,12 +220,14 @@ PUT application/admin/{
 }
 管理员把结果改为申请失败GET student/{
     "id":1,
+    "is_deleted":false,
+    "deleted_at":"22:57:08.042890",
     "number":"19337001",
-    "suahours":154.0,
+    "suahours":173.0,
     "classtype":"一班",
     "grade":2021,
     "phone":"000",
-    "power":1,
+    "power":2,
     "name":"ckh"
 }
 GET student/admin/[
@@ -199,12 +237,14 @@ GET student/admin/[
             "username":"19337001",
             "id":1
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.042890",
         "number":"19337001",
-        "suahours":154.0,
+        "suahours":173.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"ckh"
     },
     {
@@ -213,12 +253,14 @@ GET student/admin/[
             "username":"19337002",
             "id":2
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.048864",
         "number":"19337002",
-        "suahours":42.0,
+        "suahours":51.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"cxc"
     },
     {
@@ -227,12 +269,14 @@ GET student/admin/[
             "username":"19337003",
             "id":3
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.054697",
         "number":"19337003",
-        "suahours":72.0,
+        "suahours":63.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"dd"
     },
     {
@@ -241,12 +285,14 @@ GET student/admin/[
             "username":"19337004",
             "id":4
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.059299",
         "number":"19337004",
-        "suahours":46.0,
+        "suahours":62.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"dzx"
     },
     {
@@ -255,12 +301,14 @@ GET student/admin/[
             "username":"19337005",
             "id":5
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.063870",
         "number":"19337005",
-        "suahours":75.0,
+        "suahours":63.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"lhb"
     },
     {
@@ -269,12 +317,14 @@ GET student/admin/[
             "username":"19337006",
             "id":6
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.069191",
         "number":"19337006",
-        "suahours":61.0,
+        "suahours":46.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"czm"
     },
     {
@@ -283,12 +333,14 @@ GET student/admin/[
             "username":"19337007",
             "id":7
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.073884",
         "number":"19337007",
-        "suahours":42.0,
+        "suahours":65.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"abc"
     },
     {
@@ -297,12 +349,14 @@ GET student/admin/[
             "username":"19337008",
             "id":8
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.079046",
         "number":"19337008",
-        "suahours":52.0,
+        "suahours":44.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"abc1"
     },
     {
@@ -311,12 +365,14 @@ GET student/admin/[
             "username":"19337009",
             "id":9
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.083836",
         "number":"19337009",
-        "suahours":52.0,
+        "suahours":69.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"abc2"
     }
 ]
@@ -327,7 +383,9 @@ POST activity/admin/{
 GET activity/admin/[
     {
         "id":12,
-        "created":"2021-06-25T16:24:07.631961+08:00",
+        "is_deleted":false,
+        "deleted_at":"22:57:09.343447",
+        "created":"2021-06-25T22:57:09.343447+08:00",
         "title":"测试端测试",
         "detail":"测试",
         "is_valid":false,
@@ -342,7 +400,9 @@ PUT activity/admin/{
 GET activity/admin/[
     {
         "id":12,
-        "created":"2021-06-25T16:24:07.640362+08:00",
+        "is_deleted":false,
+        "deleted_at":"22:57:09.343447",
+        "created":"2021-06-25T22:57:09.350937+08:00",
         "title":"我改过了",
         "detail":"测试",
         "is_valid":false,
@@ -389,12 +449,14 @@ GET activity/admin/?id=12[
             "username":"19337001",
             "id":1
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.042890",
         "number":"19337001",
-        "suahours":654.0,
+        "suahours":673.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"ckh"
     },
     {
@@ -403,12 +465,14 @@ GET activity/admin/?id=12[
             "username":"19337002",
             "id":2
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.048864",
         "number":"19337002",
-        "suahours":42.0,
+        "suahours":51.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"cxc"
     },
     {
@@ -417,12 +481,14 @@ GET activity/admin/?id=12[
             "username":"19337003",
             "id":3
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.054697",
         "number":"19337003",
-        "suahours":72.0,
+        "suahours":63.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"dd"
     },
     {
@@ -431,12 +497,14 @@ GET activity/admin/?id=12[
             "username":"19337004",
             "id":4
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.059299",
         "number":"19337004",
-        "suahours":46.0,
+        "suahours":62.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"dzx"
     },
     {
@@ -445,12 +513,14 @@ GET activity/admin/?id=12[
             "username":"19337005",
             "id":5
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.063870",
         "number":"19337005",
-        "suahours":75.0,
+        "suahours":63.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"lhb"
     },
     {
@@ -459,12 +529,14 @@ GET activity/admin/?id=12[
             "username":"19337006",
             "id":6
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.069191",
         "number":"19337006",
-        "suahours":61.0,
+        "suahours":46.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"czm"
     },
     {
@@ -473,12 +545,14 @@ GET activity/admin/?id=12[
             "username":"19337007",
             "id":7
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.073884",
         "number":"19337007",
-        "suahours":42.0,
+        "suahours":65.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"abc"
     },
     {
@@ -487,12 +561,14 @@ GET activity/admin/?id=12[
             "username":"19337008",
             "id":8
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.079046",
         "number":"19337008",
-        "suahours":52.0,
+        "suahours":44.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"abc1"
     },
     {
@@ -501,12 +577,14 @@ GET activity/admin/?id=12[
             "username":"19337009",
             "id":9
         },
+        "is_deleted":false,
+        "deleted_at":"22:57:08.083836",
         "number":"19337009",
-        "suahours":52.0,
+        "suahours":69.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
-        "power":1,
+        "power":2,
         "name":"abc2"
     }
 ]

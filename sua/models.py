@@ -2,13 +2,14 @@ from django.db import models
 from django.contrib.auth.models import User, Group
 from django.utils import timezone
 from .storage import FileStorage
+from .softdelete import SoftDeletableModel
 import datetime
 YEAR_CHOICES = []
 for r in range(2016, datetime.datetime.now().year+1):
     YEAR_CHOICES.append((r, r))
 # Create your models here.
 
-class StudentInfo(models.Model):
+class StudentInfo(SoftDeletableModel):
     user = models.OneToOneField(
         User,  
         on_delete=models.CASCADE,
@@ -21,7 +22,7 @@ class StudentInfo(models.Model):
         default=datetime.datetime.now().year
     )
     phone = models.CharField(max_length=100,default='000')
-    power = models.IntegerField(default=0)  
+    power = models.IntegerField(default=0)  #0,普通学生；1，管理员；2.最高管理员
     name = models.CharField(max_length=100)
     def get_suahours(self):
         total = 0
@@ -36,7 +37,7 @@ class StudentInfo(models.Model):
 
     def __str__(self):
         return self.name
-class Activity(models.Model):
+class Activity(SoftDeletableModel):
     owner=models.ForeignKey(
         StudentInfo,
         related_name="activity",
@@ -54,7 +55,7 @@ class Activity(models.Model):
 
 
 
-class Sua(models.Model):
+class Sua(SoftDeletableModel):
     student = models.ForeignKey(
         StudentInfo,
         related_name='suas',
@@ -70,7 +71,7 @@ class Sua(models.Model):
     added=models.BooleanField(default=False)
 
 
-class Proof(models.Model):
+class Proof(SoftDeletableModel):
     owner = models.ForeignKey(
         StudentInfo,
         related_name='proofs',
@@ -87,7 +88,7 @@ class Proof(models.Model):
     
 
 
-class Application(models.Model):
+class Application(SoftDeletableModel):
     sua = models.OneToOneField(
         Sua,
         related_name='application',

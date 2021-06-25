@@ -40,6 +40,7 @@ adminurl=[path('student/admin/',AdminViews.AdminStudentView.as_view()),
     path('sua/admin/',AdminViews.AdminSuaView.as_view()),
     path('application/admin/',AdminViews.AdminApplicationView.as_view()),
     path('changepw/admin/',AdminViews.AdminChangePw.as_view()),
+    path('deleterecord/admin/',AdminViews.AdminDeleteRecord.as_view()),
 ]
     
 urlpatterns = [

@@ -1,10 +1,8 @@
 from django.db import models
 from django.db.models.query import QuerySet
-'''
-文件未完成
-'''
+
 # 自定义软删除查询基类
-class SoftDeletableQuerySetMixin():
+class SoftDeletableQuerySetMixin(object):
     """
     QuerySet for SoftDeletableModel. Instead of removing instance sets
     its ``is_deleted`` field to True.
@@ -12,7 +10,7 @@ class SoftDeletableQuerySetMixin():
 
     def delete(self):
         """
-        Soft delete objects from queryset (set their ``is_deleted``
+        Soft delete object from queryset (set their ``is_deleted``
         field to True)
         """
         self.update(is_deleted=True)
@@ -42,6 +40,7 @@ class SoftDeletableManagerMixin(object):
 
 class SoftDeletableManager(SoftDeletableManagerMixin, models.Manager):
     pass
+
 class SoftDeletableModel(models.Model):
     """
     An abstract base class model with a ``is_deleted`` field that
@@ -49,12 +48,14 @@ class SoftDeletableModel(models.Model):
     kept in db for any reason.
     Default manager returns only not-deleted entries.
     """
-    deletedat=
+    is_deleted = models.BooleanField(default=False)
+    deleted_at=models.TimeField(auto_now_add=True)
 
     class Meta:
         abstract = True
 
-    objects = SoftDeletableManager()
+    object = SoftDeletableManager()
+    objects=models.Manager()
 
     def delete(self, using=None, soft=True, *args, **kwargs):
         """
