@@ -1,7 +1,7 @@
 GET student/{
     "id":1,
     "number":"19337001",
-    "suahours":50.0,
+    "suahours":54.0,
     "classtype":"一班",
     "grade":2021,
     "phone":"000",
@@ -11,35 +11,17 @@ GET student/{
 GET index/[
     {
         "activity":{
-            "id":2,
-            "created":"2021-06-05T11:07:11.686286+08:00",
-            "title":"Haha",
+            "id":4,
+            "created":"2021-06-25T16:24:06.329093+08:00",
+            "title":"Ohhhhh",
             "detail":""
         },
-        "suahours":6.0
-    },
-    {
-        "activity":{
-            "id":7,
-            "created":"2021-06-05T11:07:11.710209+08:00",
-            "title":"gosh",
-            "detail":""
-        },
-        "suahours":3.0
-    },
-    {
-        "activity":{
-            "id":1,
-            "created":"2021-06-05T11:07:11.680292+08:00",
-            "title":"Hello",
-            "detail":""
-        },
-        "suahours":1.0
+        "suahours":8.0
     },
     {
         "activity":{
             "id":6,
-            "created":"2021-06-05T11:07:11.706422+08:00",
+            "created":"2021-06-25T16:24:06.340057+08:00",
             "title":"fuck",
             "detail":""
         },
@@ -47,35 +29,17 @@ GET index/[
     },
     {
         "activity":{
-            "id":5,
-            "created":"2021-06-05T11:07:11.700412+08:00",
-            "title":"God",
+            "id":4,
+            "created":"2021-06-25T16:24:06.329093+08:00",
+            "title":"Ohhhhh",
             "detail":""
         },
-        "suahours":10.0
+        "suahours":3.0
     },
     {
         "activity":{
             "id":9,
-            "created":"2021-06-05T11:07:11.719502+08:00",
-            "title":"nmsl",
-            "detail":""
-        },
-        "suahours":10.0
-    },
-    {
-        "activity":{
-            "id":8,
-            "created":"2021-06-05T11:07:11.715154+08:00",
-            "title":"goodbye",
-            "detail":""
-        },
-        "suahours":9.0
-    },
-    {
-        "activity":{
-            "id":9,
-            "created":"2021-06-05T11:07:11.719502+08:00",
+            "created":"2021-06-25T16:24:06.356278+08:00",
             "title":"nmsl",
             "detail":""
         },
@@ -83,21 +47,57 @@ GET index/[
     },
     {
         "activity":{
-            "id":4,
-            "created":"2021-06-05T11:07:11.696296+08:00",
-            "title":"Ohhhhh",
+            "id":5,
+            "created":"2021-06-25T16:24:06.334079+08:00",
+            "title":"God",
             "detail":""
         },
         "suahours":2.0
     },
     {
         "activity":{
+            "id":4,
+            "created":"2021-06-25T16:24:06.329093+08:00",
+            "title":"Ohhhhh",
+            "detail":""
+        },
+        "suahours":8.0
+    },
+    {
+        "activity":{
+            "id":6,
+            "created":"2021-06-25T16:24:06.340057+08:00",
+            "title":"fuck",
+            "detail":""
+        },
+        "suahours":4.0
+    },
+    {
+        "activity":{
+            "id":9,
+            "created":"2021-06-25T16:24:06.356278+08:00",
+            "title":"nmsl",
+            "detail":""
+        },
+        "suahours":8.0
+    },
+    {
+        "activity":{
+            "id":10,
+            "created":"2021-06-25T16:24:06.361260+08:00",
+            "title":"goddamnit",
+            "detail":""
+        },
+        "suahours":4.0
+    },
+    {
+        "activity":{
             "id":8,
-            "created":"2021-06-05T11:07:11.715154+08:00",
+            "created":"2021-06-25T16:24:06.351022+08:00",
             "title":"goodbye",
             "detail":""
         },
-        "suahours":1.0
+        "suahours":9.0
     }
 ]
 POST application/{
@@ -111,7 +111,7 @@ GET application/[
             "id":91,
             "activity":{
                 "id":11,
-                "created":"2021-06-05T11:07:12.824642+08:00",
+                "created":"2021-06-25T16:24:07.577339+08:00",
                 "title":"testing",
                 "detail":"100个公益时"
             },
@@ -119,11 +119,11 @@ GET application/[
         },
         "proof":{
             "id":1,
-            "created":"2021-06-05T11:07:12.800446+08:00",
+            "created":"2021-06-25T16:24:07.557138+08:00",
             "is_offline":true,
             "proof_file":null
         },
-        "created":"2021-06-05T11:07:12.815656+08:00",
+        "created":"2021-06-25T16:24:07.567515+08:00",
         "contact":"13612687802",
         "is_checked":true,
         "status":0,
@@ -140,20 +140,23 @@ GET application/admin/[
         "id":1,
         "proof":{
             "id":1,
-            "created":"2021-06-05T11:07:12.800446+08:00",
+            "created":"2021-06-25T16:24:07.557138+08:00",
             "is_offline":true,
             "proof_file":null,
             "owner":1
         },
         "sua":{
-            "activity":{
-                "created":"2021-06-05T11:07:12.824642+08:00",
-                "title":"testing",
-                "detail":"100个公益时"
+            "student":{
+                "user":{
+                    "username":"19337001",
+                    "id":1
+                },
+                "name":"ckh",
+                "id":1
             },
             "suahours":100.0
         },
-        "created":"2021-06-05T11:07:12.815656+08:00",
+        "created":"2021-06-25T16:24:07.567515+08:00",
         "contact":"136",
         "is_checked":true,
         "status":0,
@@ -168,7 +171,7 @@ PUT application/admin/{
 申请已通过GET student/{
     "id":1,
     "number":"19337001",
-    "suahours":150.0,
+    "suahours":154.0,
     "classtype":"一班",
     "grade":2021,
     "phone":"000",
@@ -182,7 +185,7 @@ PUT application/admin/{
 管理员把结果改为申请失败GET student/{
     "id":1,
     "number":"19337001",
-    "suahours":150.0,
+    "suahours":154.0,
     "classtype":"一班",
     "grade":2021,
     "phone":"000",
@@ -197,7 +200,7 @@ GET student/admin/[
             "id":1
         },
         "number":"19337001",
-        "suahours":150.0,
+        "suahours":154.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -211,7 +214,7 @@ GET student/admin/[
             "id":2
         },
         "number":"19337002",
-        "suahours":46.0,
+        "suahours":42.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -225,7 +228,7 @@ GET student/admin/[
             "id":3
         },
         "number":"19337003",
-        "suahours":58.0,
+        "suahours":72.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -239,7 +242,7 @@ GET student/admin/[
             "id":4
         },
         "number":"19337004",
-        "suahours":54.0,
+        "suahours":46.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -253,7 +256,7 @@ GET student/admin/[
             "id":5
         },
         "number":"19337005",
-        "suahours":43.0,
+        "suahours":75.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -267,7 +270,7 @@ GET student/admin/[
             "id":6
         },
         "number":"19337006",
-        "suahours":63.0,
+        "suahours":61.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -281,7 +284,7 @@ GET student/admin/[
             "id":7
         },
         "number":"19337007",
-        "suahours":58.0,
+        "suahours":42.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -295,7 +298,7 @@ GET student/admin/[
             "id":8
         },
         "number":"19337008",
-        "suahours":49.0,
+        "suahours":52.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -309,7 +312,7 @@ GET student/admin/[
             "id":9
         },
         "number":"19337009",
-        "suahours":70.0,
+        "suahours":52.0,
         "classtype":"一班",
         "grade":2021,
         "phone":"000",
@@ -324,7 +327,7 @@ POST activity/admin/{
 GET activity/admin/[
     {
         "id":12,
-        "created":"2021-06-05T11:07:12.874987+08:00",
+        "created":"2021-06-25T16:24:07.631961+08:00",
         "title":"测试端测试",
         "detail":"测试",
         "is_valid":false,
@@ -339,11 +342,171 @@ PUT activity/admin/{
 GET activity/admin/[
     {
         "id":12,
-        "created":"2021-06-05T11:07:12.882330+08:00",
+        "created":"2021-06-25T16:24:07.640362+08:00",
         "title":"我改过了",
         "detail":"测试",
         "is_valid":false,
         "is_created_by_admin":true,
         "owner":1
+    }
+]
+POST sua/admin/{
+    "code":100,
+    "msg":"Successfully created."
+}
+PUT activity/admin{
+    "code":100,
+    "msg":"Successfully updated."
+}
+GET activity/admin/?id=12[
+    {
+        "student":{
+            "user":{
+                "username":"19337001",
+                "id":1
+            },
+            "name":"ckh",
+            "id":1
+        },
+        "suahours":500.0
+    },
+    {
+        "student":{
+            "user":{
+                "username":"19337002",
+                "id":2
+            },
+            "name":"cxc",
+            "id":2
+        },
+        "suahours":0.0
+    }
+]
+管理员审核活动通过GET student/admin/[
+    {
+        "id":1,
+        "user":{
+            "username":"19337001",
+            "id":1
+        },
+        "number":"19337001",
+        "suahours":654.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"ckh"
+    },
+    {
+        "id":2,
+        "user":{
+            "username":"19337002",
+            "id":2
+        },
+        "number":"19337002",
+        "suahours":42.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"cxc"
+    },
+    {
+        "id":3,
+        "user":{
+            "username":"19337003",
+            "id":3
+        },
+        "number":"19337003",
+        "suahours":72.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"dd"
+    },
+    {
+        "id":4,
+        "user":{
+            "username":"19337004",
+            "id":4
+        },
+        "number":"19337004",
+        "suahours":46.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"dzx"
+    },
+    {
+        "id":5,
+        "user":{
+            "username":"19337005",
+            "id":5
+        },
+        "number":"19337005",
+        "suahours":75.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"lhb"
+    },
+    {
+        "id":6,
+        "user":{
+            "username":"19337006",
+            "id":6
+        },
+        "number":"19337006",
+        "suahours":61.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"czm"
+    },
+    {
+        "id":7,
+        "user":{
+            "username":"19337007",
+            "id":7
+        },
+        "number":"19337007",
+        "suahours":42.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"abc"
+    },
+    {
+        "id":8,
+        "user":{
+            "username":"19337008",
+            "id":8
+        },
+        "number":"19337008",
+        "suahours":52.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"abc1"
+    },
+    {
+        "id":9,
+        "user":{
+            "username":"19337009",
+            "id":9
+        },
+        "number":"19337009",
+        "suahours":52.0,
+        "classtype":"一班",
+        "grade":2021,
+        "phone":"000",
+        "power":1,
+        "name":"abc2"
     }
 ]

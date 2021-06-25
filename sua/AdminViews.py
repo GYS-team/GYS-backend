@@ -186,6 +186,11 @@ class AdminActivityView(GenericAPIView):
     serializer_class=ActivitySerializer
     def get(self,request):
         se=self.get_serializer(instance=self.get_queryset(),many=True)
+        if (request.GET.get('id',None)!=None):
+            id=request.GET['id']
+            suas=Activity.objects.get(id=id).suas.all()
+            se=SuaFullSerializer(instance=suas,many=True)
+            return Response(se.data)
         return Response(se.data)
     def post(self,request):
         data=request.data

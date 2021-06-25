@@ -30,6 +30,7 @@ class StudentInfoSerializer(serializers.ModelSerializer):
 class StudentInfoBasicSerializer(serializers.ModelSerializer):
      user=UserFullSerializer()   
      class Meta:
+         model=StudentInfo
          fields=['user','name','id']
          read_only_fields=['user','name','id']
 class ActivitySerializer(serializers.ModelSerializer):
@@ -63,10 +64,11 @@ class ProofSerializer(serializers.ModelSerializer):
         model=Proof
         fields="__all__"
 class SuaFullSerializer(serializers.ModelSerializer):
-    activity=ActivityFullSerializer()
+    #activty查sua用
+    student=StudentInfoBasicSerializer()
     class Meta:
         model=Sua
-        fields=["activity","suahours"]
+        fields=["student","suahours"]
         
 class ApplicationSerializer(serializers.ModelSerializer):
     proof=ProofSerializer()

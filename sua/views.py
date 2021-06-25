@@ -67,6 +67,7 @@ class LogoutView(APIView):
             ret['result'] = 1
         except Exception as e:
             ret['result']= 0
+            # 此处有一个仅出现在浏览器测试时的bug。浏览器无法正常登出，但是Postman可以
         return Response(ret)
 class ChangePw(APIView):
     '''

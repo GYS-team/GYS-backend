@@ -91,7 +91,8 @@ def run_test():
     sua_data=[{"student":"19337001","suahours":"500","activity":"12"},{"student":"19337002","activity":"12"}]
     TestPOST('sua/admin/',AdminSuaView,sua_data)
     ac_data['is_valid']="true"
-    TestPUT('activity/admin',ac_data)
+    TestPUT('activity/admin',AdminActivityView,ac_data)
+    TestGET('activity/admin/?id=12',AdminActivityView)
     f.write('管理员审核活动通过')
     TestGET('student/admin/',AdminStudentView)
 run_test()
