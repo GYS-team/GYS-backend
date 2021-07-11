@@ -208,7 +208,7 @@ class AdminActivityView(GenericAPIView):
             se.save()
             
             if ((se.validated_data.get('is_valid',None)!=None) and request.user.studentinfo.power<2):
-                return Response("Bad Permissions")# todo
+                return Response("Bad Permissions") 
             if (obj.is_valid==True):
                 for sua in obj.suas.all():
                     if (sua.added==False):

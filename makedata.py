@@ -25,7 +25,7 @@ for i in range(len(UserName)):
     user.save()
 print('successfully created %d Users.' % i)
 for i in range(len(UserName)):
-    stu=StudentInfo(user=User.objects.get(id=i+1),name=UserName[i],number=User.objects.get(id=i+1).username,power=2)
+    stu=StudentInfo(user=User.objects.get(id=i+1),name=UserName[i],number=User.objects.get(id=i+1).username,power=i%3)
     stu.save()
 print('successfully created %d StudentInfo.' % i)
 count=0
