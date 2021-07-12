@@ -64,7 +64,8 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_SCHEMA_CLASS': 'rest_framework.schemas.coreapi.AutoSchema',
     'DEFAULT_PAGINATION_CLASS':  'rest_framework.pagination.PageNumberPagination',
-    'PAGE_SIZE': 5  # 每页数目
+    'PAGE_SIZE': 5,  # 每页数目
+    'EXCEPTION_HANDLER':('sua.BaseResponse.exception.custom_exception_handler')
 }
 
 

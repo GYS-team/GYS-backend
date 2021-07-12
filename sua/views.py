@@ -1,3 +1,4 @@
+from sua.BaseResponse.ResponseConst import CODE_AUTH_ERROR, CODE_INTERNAL_ERROR, MSG_AUTH_ERROR, MSG_INTERNAL_ERROR
 from django.shortcuts import render,HttpResponse,redirect
 from django.http import JsonResponse
 from django.contrib.auth import authenticate,login,logout
@@ -16,7 +17,7 @@ from rest_framework.authtoken.views import ObtainAuthToken
 from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
-
+from .BaseResponse import BaseResponse as BR
 # Create your views here.
 
 #以上是Django的视图函数
@@ -53,22 +54,25 @@ class LoginView(ObtainAuthToken):
                 Token.objects.filter(user=user).delete()
                 token, created = Token.objects.get_or_create(user=user)
                 user.studentinfo.suahours=user.studentinfo.get_suahours()
-                return Response({'result':1,'id':user.studentinfo.id,'token':token.key})       
+                return BR.BaseResponse(data={'id':user.studentinfo.id,'token':token.key})       
             else:
-                return Response({'result':0})
+                return BR.BaseResponse(code=CODE_AUTH_ERROR,message=MSG_AUTH_ERROR)
         
 class LogoutView(APIView):
     queryset = User.objects.all()    
     def get(self, request):
-        ret={}
+        ret=0
         try:
             # 退出时删除用户登录时生成的Token
             Token.objects.filter(user=request.user).delete()
-            ret['result'] = 1
+            ret = 1
         except Exception as e:
-            ret['result']= 0
+            ret= 0
             # 此处有一个仅出现在浏览器测试时的bug。浏览器无法正常登出，但是Postman可以
-        return Response(ret)
+        if (ret==0):
+            return BR.BaseResponse(code=CODE_INTERNAL_ERROR,message=MSG_INTERNAL_ERROR)
+        else:
+            return BR.BaseResponse()
 class ChangePw(APIView):
     '''
     post:
@@ -80,7 +84,7 @@ class ChangePw(APIView):
         user=request.user
         user.set_password(new_pw)
         user.save()
-        return Response('{result:1}')
+        return BR.BaseResponse()
 class StudentView(GenericAPIView):
     permission_classes=[IsAuthenticated]
     """
@@ -91,7 +95,7 @@ class StudentView(GenericAPIView):
     def get(self,request):
         stu=StudentInfo.object.get(id=request.user.studentinfo.id)
         se= self.get_serializer(instance=stu)
-        return Response(se.data)    
+        return BR.BaseResponse(data=se.data)    
 
 class ActivityView(GenericAPIView):
     permission_classes=[IsAuthenticated,ActivityPermissions]
@@ -105,7 +109,7 @@ class ActivityView(GenericAPIView):
     def get(self,request,id):
         ac=self.get_object()
         se= self.get_serializer(instance=ac)
-        return Response(se.data) 
+        return BR.BaseResponse(data=se.data) 
 
 
 
@@ -122,20 +126,23 @@ class ApplicationView(GenericAPIView):
     def get(self,request):
         query=Application.object.filter(owner=request.user.studentinfo)
         se= self.get_serializer(instance=query,many=True)
-        return Response(se.data) 
+        return BR.BaseResponse(data=se.data) 
     def post(self,request):
         data=request.data
         se=self.get_serializer(data=data)
         if (se.is_valid(raise_exception=True)):
             se.save(stu=request.user.studentinfo)
-            return Response({'code':100,'msg':'Successfully created.'})
+            return BR.BaseResponse()
     def put(self,request):
+        #todo 精细的权限控制
         data=request.data.copy()
         obj=self.get_queryset().get(id=data.pop('id'))
+        if (obj.status!=0):
+            return BR.BaseResponse()
         se=self.get_serializer(instance=obj,data=data,partial=True)
         if (se.is_valid(raise_exception=True)):
             se.save()
-        return Response({'code':100,'msg':'Successfully updated.'})
+        return BR.BaseResponse()
 class ProofView(GenericAPIView):
     '''
     post:
@@ -149,7 +156,7 @@ class ProofView(GenericAPIView):
         se=self.get_serializer(data=data)
         if (se.is_valid(raise_exception=True)):
             se.save(owner=stu)
-        return Response({'code':'100','msg':'successfully created'})
+        return BR.BaseResponse()
 class IndexView(APIView):
     permission_classes=[IsAuthenticated]
     '''
@@ -159,7 +166,7 @@ class IndexView(APIView):
     def get(self,request):
         sua=StudentInfo.object.get(id=request.user.studentinfo.id).suas.all()
         se=SuaFullSerializer(instance=sua,many=True)
-        return Response(se.data)   
+        return BR.BaseResponse(data=se.data)   
     
     
 # 以下仅作代码备份用
@@ -176,5 +183,5 @@ class SuaView(GenericAPIView):
     def get(self,request,id):
         sua=self.get_object()
         se= self.get_serializer(instance=sua)
-        return Response(se.data) 
+        return BR.BaseResponse(data=se.data) 
     
