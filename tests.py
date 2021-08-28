@@ -1,10 +1,11 @@
-import django
+#coding=utf8
 import json
+import django
+
+import os
 '''
 此文件未完成。
 '''
-import os
-
 os.environ['DJANGO_SETTINGS_MODULE']='backend.settings'
 django.setup()
 os.system("python makedata.py")
@@ -20,15 +21,17 @@ class Test():
     def __init__(self,username):
         self.user= User.objects.get(username=username)
         self.factory = APIRequestFactory()
-        self.f=open('test_result.txt','w')
-
+        self.f=open('test_result.txt','a+')
+        print('#')
     def TestGET(self,url,view,**kwargs):
         self.f.write('GET '+url)
+        os.system('tail test_result.txt')
         request = self.factory.get(url,format='json')
         force_authenticate(request, user=self.user)
         response = view.as_view()(request,**kwargs)
         response.render()
         ans=json.loads(response.content)
+        
         self.f.write(json.dumps(ans,indent=4, separators=(',', ':'), ensure_ascii=False)+'\n')
     def TestPOST(self,url,view,data):
         self.f.write('POST '+url)
@@ -84,13 +87,14 @@ class Test():
         #以下是管理员端口的测试
         
         self.TestGET('student/admin/',AdminStudentView)
-        
+        print('1')
         #管理员创建活动
         ac_data={
             "title":"测试端测试",
             "detail":"测试"
         }
         self.TestPOST('activity/admin/',AdminActivityView,ac_data)
+        print('2')
         self.TestGET('activity/admin/',AdminActivityView)
         ac_data['title']="我改过了"
         ac_data['id']=12 #注意前面添加过一个活动了，而且管理员无权修改非管理员创建的活动
@@ -110,7 +114,7 @@ class Test():
         self.TestGET('student/admin/',AdminStudentView)
         self.f.close()
         
-
+print('test')
 all_api_test=Test(username='19337003')
 all_api_test.run_test()
 Permissions_test=Test(username='19337002')

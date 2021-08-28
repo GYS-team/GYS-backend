@@ -19,7 +19,7 @@ class StudentInfoSerializer(serializers.ModelSerializer):
             
     class Meta:
         model=StudentInfo   
-        fields="__all__"
+        exclude=["is_deleted","deleted_at"]
         extra_kwargs={
             "user":{'help_text':'student对象对应的user对象'},
             "name":{'help_text':'学生姓名'},
@@ -28,7 +28,7 @@ class StudentInfoSerializer(serializers.ModelSerializer):
         read_only_fields=['suahours']
 
 class StudentInfoBasicSerializer(serializers.ModelSerializer):
-     user=UserFullSerializer()   
+        
      class Meta:
          model=StudentInfo
          fields=['user','name','id']
@@ -40,7 +40,7 @@ class ActivitySerializer(serializers.ModelSerializer):
         return new_ac
     class Meta:
         model=Activity
-        fields="__all__"
+        exclude=["is_deleted","deleted_at"]
         extra_kwargs={
             "owner":{'help_text':'The organizer of activity,represented by his student_id'}
         }
@@ -53,29 +53,31 @@ class SuaSerializer(serializers.ModelSerializer):
 
     class Meta:
         model=Sua
-        fields="__all__"
+        exclude=["is_deleted","deleted_at"]
 
-class ActivityFullSerializer(serializers.ModelSerializer):
-    class Meta:
-        model=Activity
-        fields=["created","title","detail"]
+
 class ProofSerializer(serializers.ModelSerializer):
     class Meta:
         model=Proof
-        fields="__all__"
-class SuaFullSerializer(serializers.ModelSerializer):
+        exclude=["is_deleted","deleted_at"]
+class SuaBasicSerializer(serializers.ModelSerializer):
     #activty查sua用
     student=StudentInfoBasicSerializer()
     class Meta:
         model=Sua
         fields=["student","suahours"]
-        
+class SuaFullSerializer(serializers.ModelSerializer):
+    student=StudentInfoBasicSerializer()
+    activity=ActivitySerializer()
+    class Meta:
+        model=Sua
+        fields=["student","activity","suahours"]
 class ApplicationSerializer(serializers.ModelSerializer):
     proof=ProofSerializer()
     sua=SuaFullSerializer()
     class Meta:
         model=Application
-        fields="__all__"
+        exclude=["is_deleted","deleted_at"]
         read_only_fields=['sua','owner','proof','contact','is_checked','created']   
 
 

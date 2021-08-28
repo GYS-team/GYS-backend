@@ -1,5 +1,6 @@
 from django.db import models
 from django.db.models.query import QuerySet
+from rest_framework.serializers import Serializer
 
 # 自定义软删除查询基类
 class SoftDeletableQuerySetMixin(object):
@@ -67,3 +68,5 @@ class SoftDeletableModel(models.Model):
             self.save(using=using)
         else:
             return super(SoftDeletableModel, self).delete(using=using, *args, **kwargs)
+
+

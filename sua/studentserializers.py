@@ -19,7 +19,8 @@ class StudentInfoSerializer(serializers.ModelSerializer):
         return new_stu
     class Meta:
         model=StudentInfo   
-        fields="__all__"
+        
+        exclude=["is_deleted","deleted_at"]
         extra_kwargs={
             "user":{'help_text':'student对象对应的user对象'},
             "name":{'help_text':'学生姓名'},
@@ -30,19 +31,19 @@ class ActivitySerializer(serializers.ModelSerializer):
     #展示活动详情用
     class Meta:
         model=Activity
-        exclude=["owner","is_valid","is_created_by_admin"]
+        exclude=["owner","is_valid","is_created_by_admin","is_deleted","deleted_at"]
 
 class SuaSerializer(serializers.ModelSerializer):
     activity=ActivitySerializer()
     #给application用的
     class Meta:
         model=Sua
-        exclude=['is_valid','student','added']
+        exclude=['is_valid','student','added',"is_deleted","deleted_at"]
     
 class ProofSerializer(serializers.ModelSerializer):
     class Meta:
         model=Proof
-        exclude=['owner']
+        exclude=['owner',"is_deleted","deleted_at"]
     
 class ApplicationSerializer(serializers.ModelSerializer):
     #查询申请
@@ -83,7 +84,7 @@ class ApplicationSerializer(serializers.ModelSerializer):
         return obj
     class Meta:
         model=Application
-        exclude=["owner"]
+        exclude=["owner","is_deleted","deleted_at"]
         read_only_fields=["status","feedback"]
        
 

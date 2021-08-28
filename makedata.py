@@ -4,12 +4,11 @@ UserName=['ckh','cxc','dd','dzx','lhb','czm','abc','abc1','abc2']
 
 PassWord=['123']
 import os,django
-os.system("del db.sqlite3")
-os.system("del proofs/proofs")
+os.system("rm -f db.sqlite3")
+os.system("rm -rf proofs/proofs")
 os.system("cd sua")
 os.environ['DJANGO_SETTINGS_MODULE']='backend.settings'
 django.setup()
-#每次开始时重置数据库
 os.system("python manage.py makemigrations sua")
 os.system("python manage.py migrate")
 from django.contrib.auth.models import User

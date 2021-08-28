@@ -14,6 +14,7 @@ from rest_framework.generics import GenericAPIView
 from .permissions import AdminPermissions,SuperAdminPermissions
 from rest_framework.pagination import PageNumberPagination
 from .BaseResponse import BaseResponse as BR
+from .Database import DBOperate
 class AdminStudentView(GenericAPIView):
     permission_classes = [SuperAdminPermissions]
     #pagination_class=PageNumberPagination
@@ -162,12 +163,12 @@ class AdminProofView(GenericAPIView):
         se=self.get_serializer(data=data)
         if (se.is_valid(raise_exception=True)):
             se.save()
-            return BR.BaseResponse(data={'code':100,'msg':'Successfully created.'})
+            return BR.BaseResponse()
     def delete(self,request):
         Id=request.query_params['id']
         stu=self.get_queryset().filter(id=Id)
         stu.delete()
-        return BR.BaseResponse(data={'code':100,'msg':'Successfully deleted.'}) 
+        return BR.BaseResponse() 
 class AdminActivityView(GenericAPIView):
     permission_classes = [AdminPermissions]
     #pagination_class=PageNumberPagination
@@ -191,7 +192,7 @@ class AdminActivityView(GenericAPIView):
         if (request.GET.get('id',None)!=None):
             id=request.query_params['id']
             suas=Activity.object.get(id=id).suas.all()
-            se=SuaFullSerializer(instance=suas,many=True)
+            se=SuaBasicSerializer(instance=suas,many=True)
             return BR.BaseResponse(data=se.data)
         return BR.BaseResponse(data=se.data)
     def post(self,request):
@@ -252,3 +253,12 @@ class AdminDeleteRecord(APIView):
         print(ac)
         ac_se=ActivitySerializer(instance=ac,many=True)
         return BR.BaseResponse(data=[stu_se.data,ac_se.data])
+
+class AdminData(APIView):
+    def get(self,request):
+        dbo=DBOperate('db.sqlite3')
+        dbo.to_excel('auth_user','学生信息')
+        dbo.to_excel('sua_activity','活动信息')
+        dbo.to_excel('sua_sua','公益时记录')
+        dbo.close()
+        return Response("ok")

@@ -9,7 +9,7 @@ from .studentserializers import *
 from django.views import View
 from rest_framework.views import APIView
 from rest_framework.response import Response
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.permissions import IsAuthenticated,AllowAny
 from rest_framework.generics import GenericAPIView
 from .permissions import ActivityPermissions, AdminPermissions
 from rest_framework.pagination import PageNumberPagination
@@ -54,7 +54,9 @@ class LoginView(ObtainAuthToken):
                 Token.objects.filter(user=user).delete()
                 token, created = Token.objects.get_or_create(user=user)
                 user.studentinfo.suahours=user.studentinfo.get_suahours()
-                return BR.BaseResponse(data={'id':user.studentinfo.id,'token':token.key})       
+                print(user)   
+                return BR.BaseResponse(data={'id':user.studentinfo.id,'token':token.key})  
+                  
             else:
                 return BR.BaseResponse(code=CODE_AUTH_ERROR,message=MSG_AUTH_ERROR)
         
@@ -93,6 +95,7 @@ class StudentView(GenericAPIView):
     """
     serializer_class=StudentInfoSerializer
     def get(self,request):
+        print(request.META.get("Authorization"))
         stu=StudentInfo.object.get(id=request.user.studentinfo.id)
         se= self.get_serializer(instance=stu)
         return BR.BaseResponse(data=se.data)    

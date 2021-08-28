@@ -1,3 +1,5 @@
 /sua/__pycache__/
 /sua/migrations/
 *.md
+*.csv
+*.xlsx
