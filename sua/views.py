@@ -18,6 +18,7 @@ from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .BaseResponse import BaseResponse as BR
+from .export import Download
 # Create your views here.
 
 #以上是Django的视图函数
@@ -95,7 +96,7 @@ class StudentView(GenericAPIView):
     """
     serializer_class=StudentInfoSerializer
     def get(self,request):
-        print(request.META.get("Authorization"))
+        #print(request.META.get("Authorization"))
         stu=StudentInfo.object.get(id=request.user.studentinfo.id)
         se= self.get_serializer(instance=stu)
         return BR.BaseResponse(data=se.data)    
@@ -187,4 +188,8 @@ class SuaView(GenericAPIView):
         sua=self.get_object()
         se= self.get_serializer(instance=sua)
         return BR.BaseResponse(data=se.data) 
+class ExportView(APIView):
+    permission_classes=[IsAuthenticated]
+    def get(self,request):
+        return Download(request)
     

@@ -54,4 +54,5 @@ urlpatterns = [
     #以下是DRF路由配置
     #path('api-auth/', include('rest_framework.urls')),   
     path('docs/', include_docs_urls(title='文档')),
+    path('export/',views.ExportView.as_view()),
 ]+authurl+studenturl+adminurl+static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

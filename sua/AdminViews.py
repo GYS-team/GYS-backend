@@ -121,7 +121,7 @@ class AdminApplicationView(GenericAPIView):
     根据申请编号删除申请信息。
 
     """
-    queryset=Application.object.filter(is_checked=True)
+    queryset=Application.object.all()
     serializer_class=ApplicationSerializer
     def get(self,request):
         se=self.get_serializer(instance=self.get_queryset(),many=True)

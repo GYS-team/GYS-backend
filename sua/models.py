@@ -106,7 +106,7 @@ class Application(SoftDeletableModel):
         related_name='applications',
         on_delete=models.CASCADE,
     )
-    is_checked = models.BooleanField(default=False) #是否已经由owner提交
+    #is_checked = models.BooleanField(default=False) 
     status = models.IntegerField(default=0)  # 0: 待审核，1：通过 2：不通过
     feedback = models.CharField(max_length=400, blank=True)
    
